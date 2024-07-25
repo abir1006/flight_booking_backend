@@ -29,6 +29,6 @@ public class Booking {
     @OneToOne
     private User passenger;
 
-    private List<Booking> bookingHistory = new ArrayList<>();
+//    private List<Booking> bookingHistory = new ArrayList<>();
 
 }

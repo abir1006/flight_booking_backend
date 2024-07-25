@@ -1,12 +1,15 @@
 package flight_booking.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import org.modelmapper.internal.bytebuddy.dynamic.loading.InjectionClassLoader;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
+@Table(name = "\"user\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +18,7 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    @Enumerated
     private Role role;
 
 }
