@@ -16,10 +16,13 @@ public class Flight {
 
     private String flightNumber;
     @OneToOne
+    @JoinColumn(name = "departure_airport_id")
     private Airport departureAirport;
     @OneToOne
+    @JoinColumn(name="arrival_airport_id")
     private Airport arrivalAirport;
     @OneToOne
+    @JoinColumn(name="flight_schedule_id")
     private FlightSchedule flightSchedule;
 
     private int availableSeats;

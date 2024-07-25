@@ -19,6 +19,7 @@ public class Notification {
     private String message;
     private LocalDate sentDate;
     @OneToOne
+    @JoinColumn(name = "booking_id")
     private Booking booking;
 
 }

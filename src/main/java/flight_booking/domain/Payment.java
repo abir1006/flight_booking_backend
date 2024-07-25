@@ -15,8 +15,10 @@ public class Payment {
     private long id;
     private double amount;
     @OneToOne
+    @JoinColumn(name="booking_id")
     private Booking booking;
     @OneToOne
+    @JoinColumn(name="payment_gateway_id")
     private PaymentGateway paymentGateway;
 
 

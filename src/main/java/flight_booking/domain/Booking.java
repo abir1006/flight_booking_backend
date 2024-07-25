@@ -24,11 +24,13 @@ public class Booking {
     private String status;
 
     @OneToOne
+    @JoinColumn(name="flight_id")
     private Flight flight;
 
     @OneToOne
+    @JoinColumn(name = "passenger_id")
     private User passenger;
 
-//    private List<Booking> bookingHistory = new ArrayList<>();
+
 
 }
