@@ -1,5 +1,6 @@
 package flight_booking.domain;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,5 +27,10 @@ public class Flight {
     private FlightSchedule flightSchedule;
 
     private int availableSeats;
+
+    //its equal for all kind of seats ..no seat classes
+    private double ticketPrice;
+
+
 
 }
