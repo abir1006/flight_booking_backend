@@ -1,4 +1,4 @@
-package flight_booking.config;
+package flight_booking.securityConfig;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
