@@ -3,10 +3,14 @@ package flight_booking.service;
 import java.util.List;
 import java.util.Optional;
 
-public interface GenericService<T, ID> {
-    T save(T entity);
-    List<T> findAll();
-    Optional<T> findById(ID id);
-    T update(T entity);
+public interface GenericService<ID,DTO> {
+    DTO save(DTO dto);
+
+    List<DTO> findAll();
+
+    Optional<DTO> findById(ID id);
+
+    DTO update(ID id, DTO dto);
+
     void deleteById(ID id);
 }

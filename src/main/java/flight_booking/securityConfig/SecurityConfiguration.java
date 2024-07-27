@@ -30,10 +30,10 @@ public class SecurityConfiguration {
 //                        .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
 //                        .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
                         .requestMatchers("/api/v1/**").permitAll()
-                        .requestMatchers("/api/v1/airports/**").permitAll()
-
-                        // Any other request must be authenticated
-                        .anyRequest().authenticated()
+//                        .requestMatchers("/api/v1/airports/**").permitAll()
+//
+//                        // Any other request must be authenticated
+//                        .anyRequest().authenticated()
                 )
                 .cors(withDefaults())
 

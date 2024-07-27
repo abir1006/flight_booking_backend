@@ -1,37 +1,56 @@
 package flight_booking.service.Impl;
 
-import flight_booking.service.GenericService;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import flight_booking.repositories.GenericRepository;
+import flight_booking.service.GenericService;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class GenericServiceImpl<T, ID> implements GenericService<T, ID> {
+@RequiredArgsConstructor
+public abstract class GenericServiceImpl<T, ID, DTO> implements GenericService<ID,DTO> {
+    private final GenericRepository<T, ID> repository;
+    private final ModelMapper modelMapper;
+    private final Class<T> entityClass;
+    private final Class<DTO> dtoClass;
 
-    private final JpaRepository<T, ID> repository;
-
-    protected GenericServiceImpl(JpaRepository<T, ID> repository) {
-        this.repository = repository;
+    @Override
+    public DTO save(DTO dto) {
+        T entity = modelMapper.map(dto, entityClass);
+        entity = repository.save(entity);
+        return modelMapper.map(entity, dtoClass);
     }
 
     @Override
-    public T save(T entity) {
-        return repository.save(entity);
+    public List<DTO> findAll() {
+        List<T> entities = repository.findAll();
+        List<DTO> dtos = new ArrayList<>();
+        for (T entity : entities) {
+            dtos.add(modelMapper.map(entity, dtoClass));
+        }
+        return dtos;
     }
 
     @Override
-    public List<T> findAll() {
-        return repository.findAll();
+    public Optional<DTO> findById(ID id) {
+        Optional<T> entity = repository.findById(id);
+
+            return entity.map(e -> modelMapper.map(e, dtoClass));
+
+
     }
 
     @Override
-    public Optional<T> findById(ID id) {
-        return repository.findById(id);
-    }
-
-    @Override
-    public T update(T entity) {
-        return repository.save(entity);
+    public DTO update(ID id, DTO dto) {
+        if (repository.existsById(id)) {
+            T entity = modelMapper.map(dto, entityClass);
+            entity = repository.save(entity);
+            return modelMapper.map(entity, dtoClass);
+        }
+        return null; // or throw an exception
     }
 
     @Override
