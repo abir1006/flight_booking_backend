@@ -159,5 +159,5 @@ buildNumber.properties
 # "temporary" build files
 /target
 
-/.env
+/env.properties
 /env.properties
