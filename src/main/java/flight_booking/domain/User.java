@@ -25,6 +25,8 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+    private String phone;
+    private String address;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -65,5 +67,5 @@ public class User implements UserDetails {
         return true;
     }
 
-    //other necessary methods
+
 }

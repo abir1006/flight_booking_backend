@@ -1,24 +1,20 @@
-package flight_booking.auth;
+package flight_booking.dto;
 
 
-import flight_booking.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class RegisterRequest {
-
+public class UserDto {
     private String firstname;
     private String lastname;
     private String email;
-    private String password;
     private String phone;
     private String address;
-    private Role role;
 
 }

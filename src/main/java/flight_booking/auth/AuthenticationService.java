@@ -1,9 +1,11 @@
 package flight_booking.auth;
 
+import flight_booking.dto.UserDto;
 import flight_booking.securityConfig.UserRepository;
 import flight_booking.securityConfig.JwtService;
 import flight_booking.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +21,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ModelMapper modelMapper;
 
     public AuthenticationResponse register(RegisterRequest request) {
         // Check if user with the same email already exists
@@ -32,6 +35,8 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .address(request.getAddress())
+                .phone(request.getPhone())
                 .build();
 
         userRepository.save(user);
@@ -49,8 +54,11 @@ public class AuthenticationService {
         );
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+
+        UserDto userDto=modelMapper.map(user, UserDto.class);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .user(userDto)
                 .build();
     }
 
