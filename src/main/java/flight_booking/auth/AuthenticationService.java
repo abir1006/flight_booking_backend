@@ -50,7 +50,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new UsernameNotFoundException("Username does not exist "));
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new UsernameNotFoundException("Email does not exist "));
 
         try {
             authenticationManager.authenticate(
@@ -60,7 +60,7 @@ public class AuthenticationService {
             );
         }
         catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Invalid username or password");
+            throw new BadCredentialsException("Invalid email or password");
         }
 
         var jwtToken = jwtService.generateToken(user);
@@ -84,7 +84,7 @@ public class AuthenticationService {
 
         // Fetch the user from the database using the email
         var user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("Email not found"));
 
         // Check if the old password matches
         if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
