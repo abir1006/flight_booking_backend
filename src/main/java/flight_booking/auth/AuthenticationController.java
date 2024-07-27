@@ -39,7 +39,7 @@ public class AuthenticationController {
         Map<String, Object> map = new HashMap<>();
         map.put("isSuccess", false);
         map.put("error", exception.getMessage());
-        map.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<Object>(map,HttpStatus.INTERNAL_SERVER_ERROR);
+        map.put("status", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<Object>(map,HttpStatus.BAD_REQUEST);
     }
 }
