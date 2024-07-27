@@ -40,9 +40,11 @@ public class AuthenticationService {
                 .build();
 
         userRepository.save(user);
+        UserDto userDto=modelMapper.map(user, UserDto.class);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .user(userDto)
                 .build();
     }
 
