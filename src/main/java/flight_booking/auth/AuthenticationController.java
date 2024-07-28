@@ -36,21 +36,7 @@ public class AuthenticationController {
     }
 
 
-    @GetMapping("/admin/{email}")
-    public ResponseEntity<UserDto> getByEmail(@PathVariable("email") String email) {
-        return ResponseEntity.ok(service.getByEmail(email));
-    }
 
-    @GetMapping("/admin")
-    public ResponseEntity<List<UserDto>> getAll() {
-        return ResponseEntity.ok(service.getAllUsers());
-    }
-
-    @DeleteMapping("/admin/{email}")
-    public ResponseEntity<Void> delete(@PathVariable("email") String email) {
-        service.removeEmail(email);
-        return ResponseEntity.noContent().build();
-    }
 
 
 
