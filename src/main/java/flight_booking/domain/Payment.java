@@ -17,9 +17,7 @@ public class Payment {
     @OneToOne
     @JoinColumn(name="booking_id")
     private Booking booking;
-    @OneToOne
-    @JoinColumn(name="payment_gateway_id")
-    private PaymentGateway paymentGateway;
+    private String paymentGateway;
 
 
 }

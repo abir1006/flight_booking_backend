@@ -15,6 +15,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -94,5 +98,32 @@ public class AuthenticationService {
         // Update the password
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
+    }
+
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User user : users) {
+            userDtos.add(modelMapper.map(user, UserDto.class));
+        }
+        return userDtos;
+    }
+
+
+    public UserDto getByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return modelMapper.map(user.get(), UserDto.class);
+        }
+        else throw new UsernameNotFoundException("Email not found");
+    }
+
+    public UserDto removeEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+        }
+        else throw new UsernameNotFoundException("Email not found");
+        return modelMapper.map(user.get(), UserDto.class);
     }
 }

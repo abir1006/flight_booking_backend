@@ -1,11 +1,13 @@
 package flight_booking.auth;
 
+import flight_booking.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -32,6 +34,24 @@ public class AuthenticationController {
         service.changePassword(request);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/admin/{email}")
+    public ResponseEntity<UserDto> getByEmail(@PathVariable("email") String email) {
+        return ResponseEntity.ok(service.getByEmail(email));
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<List<UserDto>> getAll() {
+        return ResponseEntity.ok(service.getAllUsers());
+    }
+
+    @DeleteMapping("/admin/{email}")
+    public ResponseEntity<Void> delete(@PathVariable("email") String email) {
+        service.removeEmail(email);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
     @ExceptionHandler(Exception.class)

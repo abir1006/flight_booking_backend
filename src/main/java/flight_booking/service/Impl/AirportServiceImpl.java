@@ -1,5 +1,6 @@
 package flight_booking.service.Impl;
 
+import flight_booking.config.securityConfig.UserRepository;
 import flight_booking.domain.Airport;
 import flight_booking.dto.AirportDto;
 import flight_booking.repositories.AirportRepository;
