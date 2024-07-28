@@ -1,6 +1,6 @@
 package flight_booking.controller;
 
-import flight_booking.domain.Airport;
+import flight_booking.controller.genericcontroller.GenericController;
 import flight_booking.dto.AirportDto;
 import flight_booking.service.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;

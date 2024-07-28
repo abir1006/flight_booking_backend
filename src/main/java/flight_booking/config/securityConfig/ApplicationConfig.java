@@ -1,4 +1,4 @@
-package flight_booking.securityConfig;
+package flight_booking.config.securityConfig;
 
 
 

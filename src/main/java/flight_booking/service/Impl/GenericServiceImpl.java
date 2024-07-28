@@ -1,7 +1,7 @@
 package flight_booking.service.Impl;
 
 
-import flight_booking.repositories.GenericRepository;
+import flight_booking.repositories.genericrepository.GenericRepository;
 import flight_booking.service.GenericService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

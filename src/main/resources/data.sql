@@ -10,3 +10,5 @@ INSERT INTO airport (name, city, country, code) VALUES
 ('Amsterdam Schiphol Airport', 'Amsterdam', 'Netherlands', 'AMS'),
 ('Singapore Changi Airport', 'Singapore', 'Singapore', 'SIN'),
 ('Incheon International Airport', 'Seoul', 'South Korea', 'ICN');
+
+

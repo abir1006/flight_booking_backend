@@ -1,4 +1,4 @@
-package flight_booking.controller;
+package flight_booking.controller.genericcontroller;
 
 import flight_booking.service.GenericService;
 import lombok.RequiredArgsConstructor;

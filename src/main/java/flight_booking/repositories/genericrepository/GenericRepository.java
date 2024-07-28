@@ -1,4 +1,4 @@
-package flight_booking.repositories;
+package flight_booking.repositories.genericrepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
