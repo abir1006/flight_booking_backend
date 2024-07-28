@@ -15,6 +15,7 @@ public class AirportController extends GenericController<Long, AirportDto> {
     public AirportController(AirportService airportService) {
         super(airportService);
     }
+    //add new different controllers
 
 
 }

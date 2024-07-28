@@ -15,6 +15,7 @@ public class DemoController {
 
     @GetMapping("/public")
     public ResponseEntity<String> sayHello() {
+
         return ResponseEntity.ok("Hello World from Security Demo");
     }
 
