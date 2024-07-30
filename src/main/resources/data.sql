@@ -1,5 +1,5 @@
 -- Insert sample data into the airport table
-INSERT INTO airport (name, city, country, code) VALUES
+INSERT INTO airports (name, city, country, code) VALUES
 ('Hartsfield-Jackson Atlanta International Airport', 'Atlanta', 'United States', 'ATL'),
 ('Beijing Capital International Airport', 'Beijing', 'China', 'PEK'),
 ('Los Angeles International Airport', 'Los Angeles', 'United States', 'LAX'),
@@ -13,7 +13,7 @@ INSERT INTO airport (name, city, country, code) VALUES
 
 -- Insert users
 -- password for all user is "123"
-INSERT INTO _user ( firstname, lastname, email, password, phone, address, role) VALUES
+INSERT INTO users ( firstname, lastname, email, password, phone, address, role) VALUES
 ('John', 'Doe', 'john.doe@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W', '1234567890', '123 Main St', 'USER'),
 ( 'Jane', 'Smith', 'jane.smith@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W', '0987654321', '456 Elm St', 'ADMIN'),
 ( 'Alice', 'Johnson', 'alice.johnson@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W', '1112223333', '789 Pine St', 'USER'),
