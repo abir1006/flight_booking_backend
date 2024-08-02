@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name="airports")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
