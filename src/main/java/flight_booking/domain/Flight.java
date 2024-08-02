@@ -28,6 +28,8 @@ public class Flight {
 
     private int availableSeats;
 
+    private String flightLogo;
+
     //its equal for all kind of seats ..no seat classes
     private double ticketPrice;
 

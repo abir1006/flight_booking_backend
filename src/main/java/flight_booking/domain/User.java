@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -29,6 +30,9 @@ public class User implements UserDetails {
     private String address;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany
+    private Set<Report> reports;
+
 
     //UserDetails implementation
 

@@ -35,4 +35,6 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long, UserDto> imp
         }
         else throw new UsernameNotFoundException("Email Not Found");
     }
+
+
 }
