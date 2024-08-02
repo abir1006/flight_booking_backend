@@ -26,14 +26,19 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF as JWTs are used (stateless)
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
-                        .requestMatchers("/api/v1/**").permitAll()
-                        .requestMatchers("/api/v1/airports/**").permitAll()
+                        //Make every end points open
+                                .anyRequest().permitAll()
 
-                        // Any other request must be authenticated
-                        .anyRequest().authenticated()
+                        //to check security comment out all of these below
+//                        .requestMatchers("/api/v1/auth/**").permitAll()
+//                        .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers("/api/v1/user/**").hasAuthority("ROLE_USER")
+//                        .requestMatchers("/api/v1/**").permitAll()
+
+//                        .requestMatchers("/api/v1/airports/**").permitAll()
+//
+//                        // Any other request must be authenticated
+//                        .anyRequest().authenticated()
                 )
                 .cors(withDefaults())
 

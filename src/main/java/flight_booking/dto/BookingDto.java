@@ -22,6 +22,8 @@ public class BookingDto {
     private Double totalPrice;
     private List<Long> flightIds;
     private Long passengerId;
+    private List<PassengerDto> passengers;
+    private String ticket;
 
 }
 

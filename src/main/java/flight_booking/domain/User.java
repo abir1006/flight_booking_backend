@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -16,19 +17,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name="_user")
+@Entity(name="users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String firstname;
     private String lastname;
+//    @Column(unique = true, nullable = false)
     private String email;
     private String password;
     private String phone;
     private String address;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany
+    private Set<Report> reports;
+
 
     //UserDetails implementation
 
