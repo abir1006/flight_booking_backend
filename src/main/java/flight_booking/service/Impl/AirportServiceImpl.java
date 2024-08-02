@@ -30,13 +30,25 @@ public class AirportServiceImpl extends GenericServiceImpl<Airport, Long, Airpor
 
     @Override
     public Page<AirportDto> getPaginatedAirports(Pageable pageable) {
-        Page<Airport> airports=airportRepository.findAll(pageable);
-        List<AirportDto> airportDtos=new ArrayList<>();
-        for (Airport airport:airports) {
-            AirportDto airportDto=modelMapper.map(airport, AirportDto.class);
+        Page<Airport> airports = airportRepository.findAll(pageable);
+        List<AirportDto> airportDtos = new ArrayList<>();
+        for (Airport airport : airports) {
+            AirportDto airportDto = modelMapper.map(airport, AirportDto.class);
             airportDtos.add(airportDto);
         }
-       return new PageImpl<>(airportDtos,pageable,airports.getTotalElements());
+        return new PageImpl<>(airportDtos, pageable, airports.getTotalElements());
 
     }
+
+    @Override
+    public AirportDto save(AirportDto airportDto) {
+        try {
+            Airport airport = modelMapper.map(airportDto, Airport.class);
+            airport = airportRepository.save(airport);
+            return modelMapper.map(airport, AirportDto.class);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Airport already existed", e);
+        }
+    }
 }
+
