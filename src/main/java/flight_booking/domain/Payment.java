@@ -13,11 +13,21 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private double amount;
-    @OneToOne
-    @JoinColumn(name="booking_id")
-    private Booking booking;
-    private String paymentGateway;
+
+    private long userId;
+    private double billValue;
+    private String cardNumber;
+    private String cardHolder;
+    private String expiryDate;
+    private String cvc;
+    private PaymentType paymentType;
+    private boolean paymentStatus;
+
+
+    enum PaymentType{
+        PAYPAL, CREDIT_CARD;
+    }
+
 
 
 }
