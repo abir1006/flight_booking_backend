@@ -18,7 +18,7 @@ public class Booking {
 
     private LocalDate bookingDate;
 
-    //status could be .1. booked without payment 2. booked with payment 3. e ticket generated/msg sent
+    //status could be .1. booked without payment 2. booked with payment(Confirm booking) 3. e ticket generated/msg sent
     private String status;
 
     @OneToOne
