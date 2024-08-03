@@ -38,21 +38,9 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
     @Override
     @Transactional
     public BookingDto bookFlight(BookingDto bookingDto) {
-
         bookingDto.setBookingDate(LocalDate.now());
-
         bookingDto.setStatus("BOOKED WITHOUT PAYMENT");
-
-        double totalAmount = bookingDto.getPassengers().size() * bookingDto.getFlightIds().size();
-        if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
-            totalAmount *= 1.8;
-        }
-        bookingDto.setTotalPrice(totalAmount);
-
-
         Booking booking = modelMapper.map(bookingDto, Booking.class);
-
-
         final Booking finalBooking = booking;
         booking.setPassengers(
                 bookingDto.getPassengers().stream()
@@ -60,13 +48,13 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
                             Passenger passenger = modelMapper.map(passengerDto, Passenger.class);
                             passenger.setBooking(finalBooking);
                             return passenger;
-                        }).toList()
+                        })
+                        .toList()
         );
-
         booking = bookingRepository.save(booking);
-
         return modelMapper.map(booking, BookingDto.class);
     }
+
 
     @Override
     @Transactional
