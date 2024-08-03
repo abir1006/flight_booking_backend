@@ -1,7 +1,7 @@
 package flight_booking.auth;
 
 import flight_booking.dto.UserDto;
-import flight_booking.config.securityConfig.UserRepository;
+import flight_booking.repositories.UserRepository;
 import flight_booking.config.securityConfig.JwtService;
 import flight_booking.domain.User;
 import lombok.RequiredArgsConstructor;

@@ -2,6 +2,7 @@ package flight_booking.config.securityConfig;
 
 
 
+import flight_booking.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
