@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,16 +19,23 @@ public class Booking {
 
     private LocalDate bookingDate;
 
-    //status could be .1. booked without payment 2. booked with payment 3. e ticket generated/msg sent
+    //status could be .1. booked without payment 2. booked with payment(Confirm booking) 3. e ticket generated/msg sent
     private String status;
+
+    private String tripType;
+
+    private double totalPrice;
 
     @OneToOne
     @JoinColumn(name="flight_id")
     private Flight flight;
 
-    @OneToOne
-    @JoinColumn(name = "passenger_id")
-    private User passenger;
+//    @OneToOne
+//    @JoinColumn(name = "passenger_id")
+//    private User passenger;
+    //Changed the relationship in order for the booking to have multiple passengers
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Passenger> passengers;
 
 
 
