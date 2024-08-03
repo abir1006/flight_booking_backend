@@ -19,13 +19,15 @@ import java.util.List;
 public class AirportServiceImpl extends GenericServiceImpl<Airport, Long, AirportDto> implements AirportService {
 
     private final AirportRepository airportRepository;
+    private final ReportServiceImpl reportServiceImpl;
     ModelMapper modelMapper;
 
     @Autowired
-    public AirportServiceImpl(AirportRepository airportRepository, ModelMapper modelMapper) {
+    public AirportServiceImpl(AirportRepository airportRepository, ModelMapper modelMapper, ReportServiceImpl reportServiceImpl) {
         super(airportRepository, modelMapper, Airport.class, AirportDto.class);
         this.airportRepository = airportRepository;
         this.modelMapper = modelMapper;
+        this.reportServiceImpl = reportServiceImpl;
     }
 
     @Override
@@ -42,6 +44,12 @@ public class AirportServiceImpl extends GenericServiceImpl<Airport, Long, Airpor
 
     @Override
     public AirportDto save(AirportDto airportDto) {
+
+        if(airportRepository.findByName(airportDto.getName()) != null)
+            throw new RuntimeException("Airport Name Already Exists");
+        if(airportRepository.findByCode(airportDto.getCode()) != null)
+            throw new RuntimeException("Airport Code Already Exists");
+
         try {
             Airport airport = modelMapper.map(airportDto, Airport.class);
             airport = airportRepository.save(airport);

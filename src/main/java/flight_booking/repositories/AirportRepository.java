@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface AirportRepository extends GenericRepository<Airport, Long> {
 
     Page<Airport> findAll(Pageable pageable);
+    Airport findByName(String name);
+    Airport findByCode(String code);
 }
