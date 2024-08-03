@@ -36,16 +36,4 @@ public class AuthenticationController {
     }
 
 
-
-
-
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleExceptions(Exception exception) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("isSuccess", false);
-        map.put("error", exception.getMessage());
-        map.put("status", HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
-    }
 }

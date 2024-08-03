@@ -24,7 +24,7 @@ public class Booking {
 
     private String tripType;
 
-    private double totalAmount;
+    private double totalPrice;
 
     @OneToOne
     @JoinColumn(name="flight_id")

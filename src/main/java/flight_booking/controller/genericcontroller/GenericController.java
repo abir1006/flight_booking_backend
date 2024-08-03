@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public abstract class GenericController<ID, DTO> {
     private final GenericService<ID, DTO> service;

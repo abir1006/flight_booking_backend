@@ -1,9 +1,11 @@
 package flight_booking.service.Impl;
 
 import flight_booking.domain.Booking;
+import flight_booking.domain.Flight;
 import flight_booking.domain.Passenger;
 import flight_booking.dto.BookingDto;
 import flight_booking.repositories.BookingRepository;
+import flight_booking.repositories.FlightRepository;
 import flight_booking.service.BookingService;
 import flight_booking.service.PaymentService;
 import jakarta.transaction.Transactional;
@@ -19,22 +21,38 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
     private final ModelMapper modelMapper;
     @Autowired
     private final BookingRepository bookingRepository;
+    @Autowired
     private final PaymentService paymentService;
+    @Autowired
+    private final FlightRepository flightRepository;
 
     @Autowired
-    public BookingServiceImpl(BookingRepository repository, ModelMapper modelMapper, BookingRepository bookingRepository, PaymentService paymentService) {
+    public BookingServiceImpl(BookingRepository repository, ModelMapper modelMapper, BookingRepository bookingRepository, PaymentService paymentService, FlightRepository flightRepository) {
         super(repository, modelMapper, Booking.class, BookingDto.class);
         this.modelMapper = modelMapper;
         this.bookingRepository = bookingRepository;
         this.paymentService = paymentService;
+        this.flightRepository = flightRepository;
     }
 
     @Override
     @Transactional
     public BookingDto bookFlight(BookingDto bookingDto) {
+
         bookingDto.setBookingDate(LocalDate.now());
+
         bookingDto.setStatus("BOOKED WITHOUT PAYMENT");
+
+        double totalAmount = bookingDto.getPassengers().size() * bookingDto.getFlightIds().size();
+        if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
+            totalAmount *= 1.8;
+        }
+        bookingDto.setTotalPrice(totalAmount);
+
+
         Booking booking = modelMapper.map(bookingDto, Booking.class);
+
+
         final Booking finalBooking = booking;
         booking.setPassengers(
                 bookingDto.getPassengers().stream()
@@ -42,10 +60,11 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
                             Passenger passenger = modelMapper.map(passengerDto, Passenger.class);
                             passenger.setBooking(finalBooking);
                             return passenger;
-                        })
-                        .toList()
+                        }).toList()
         );
+
         booking = bookingRepository.save(booking);
+
         return modelMapper.map(booking, BookingDto.class);
     }
 
@@ -68,9 +87,8 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         ticketBuilder.append("Flight Booking Ticket\n")
                 .append("Booking ID: ").append(booking.getId()).append("\n")
                 .append("Booking Date: ").append(booking.getBookingDate().toString()).append("\n")
-                .append("Status: ").append(booking.getStatus()).append("\n")
                 .append("Trip Type: ").append(booking.getTripType()).append("\n")
-                .append("Amount Paid: ").append(booking.getFlight().getTicketPrice()).append("\n")
+                .append("Amount Paid: ").append(booking.getTotalPrice()).append("\n")
                 .append("Passengers:\n");
 
         for (Passenger passenger : booking.getPassengers()) {
@@ -95,6 +113,18 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         }
         booking.setStatus("CONFIRMED");
 
+        Flight flight = booking.getFlight();
+        int passengersCount = booking.getPassengers().size();
+        if (flight.getAvailableSeats() < passengersCount) {
+            throw new RuntimeException("Not enough available seats for booking ID: " + bookingId);
+        }
+        flight.setAvailableSeats(flight.getAvailableSeats() - passengersCount);
+        flightRepository.save(flight);
+
+        if ("ROUND_TRIP".equalsIgnoreCase(booking.getTripType())) {
+            booking.setTotalPrice(booking.getTotalPrice() * 1.8);
+        }
+
         String ticket = generateTicket(bookingId);
 
         booking = bookingRepository.save(booking);
@@ -102,15 +132,5 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         bookingDto.setTicket(ticket);
 
         return bookingDto;
-
-        // Additional Booking-specific business implemented here
     }
 }
-
-
-
-
-
-
-
-

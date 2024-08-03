@@ -3,14 +3,10 @@ package flight_booking.controller;
 import flight_booking.controller.genericcontroller.GenericController;
 import flight_booking.dto.UserDto;
 import flight_booking.service.UserService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admin/users")
