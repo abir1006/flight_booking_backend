@@ -1,6 +1,7 @@
 package flight_booking.service.Impl;
 
 import flight_booking.domain.Passenger;
+import flight_booking.dto.BookingDto;
 import flight_booking.dto.PassengerDto;
 import flight_booking.repositories.genericrepository.PassengerRepository;
 import flight_booking.service.PassengerService;

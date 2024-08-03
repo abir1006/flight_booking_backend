@@ -1,8 +1,10 @@
 package flight_booking.service.Impl;
 
 
+import flight_booking.dto.BookingDto;
 import flight_booking.repositories.genericrepository.GenericRepository;
 import flight_booking.service.GenericService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
@@ -57,4 +59,5 @@ public abstract class GenericServiceImpl<T, ID, DTO> implements GenericService<I
     public void deleteById(ID id) {
         repository.deleteById(id);
     }
+
 }
