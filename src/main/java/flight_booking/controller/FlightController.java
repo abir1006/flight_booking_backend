@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -70,6 +72,17 @@ public class FlightController extends GenericController<Long,FlightDto> {
     public ResponseEntity<List<FlightDto>> searchByAvailableSeats(@RequestParam int availableSeats) {
         List<FlightDto> flights = flightService.searchByAvailableSeats(availableSeats);
         return new ResponseEntity<>(flights, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public List<FlightDto> searchFlights(
+            @RequestParam(required = false) Long departureAirportId,
+            @RequestParam(required = false) Long arrivalAirportId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) Integer travellers) {
+
+        return flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
     }
 
     //There should be Airplane Entity Model

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface FlightRepository extends GenericRepository<Flight, Long> {
+public interface FlightRepository extends GenericRepository<Flight, Long>, FlightRepositoryCustom {
 
     @Query("SELECT f FROM Flight f WHERE f.departureAirport.id = :airportId OR f.arrivalAirport.id = :airportId")
     List<Flight> findByAirport(Long airportId);

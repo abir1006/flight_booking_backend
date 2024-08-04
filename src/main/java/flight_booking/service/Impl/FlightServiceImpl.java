@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,6 +59,14 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
     @Override
     public List<FlightDto> searchByAvailableSeats(int availableSeats) {
         return flightRepository.findByAvailableSeatsGreaterThanEqual(availableSeats).stream()
+                .map(flight -> modelMapper.map(flight, FlightDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FlightDto> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
+        List<Flight> flights = flightRepository.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
+        return flights.stream()
                 .map(flight -> modelMapper.map(flight, FlightDto.class))
                 .collect(Collectors.toList());
     }
