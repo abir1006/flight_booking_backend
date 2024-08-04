@@ -1,15 +1,10 @@
 package flight_booking.service.Impl;
 
-import flight_booking.domain.Airport;
+
 import flight_booking.domain.Flight;
-import flight_booking.dto.AirportDto;
 import flight_booking.dto.FlightDto;
 import flight_booking.repositories.FlightRepository;
-import flight_booking.service.AirportService;
 import flight_booking.service.FlightService;
-import flight_booking.service.GenericService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,38 +27,19 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
         this.modelMapper = modelMapper;
     }
 
-//    @Override
-//    public FlightDto createFlight(FlightDto flightDto) {
-//        Flight flight = modelMapper.map(flightDto, Flight.class);
-//        flight = flightRepository.save(flight);
-//        return modelMapper.map(flight, FlightDto.class);
-//    }
-//
-//    @Override
-//    public List<FlightDto> getAllFlights() {
-//        return flightRepository.findAll().stream()
-//                .map(flight -> modelMapper.map(flight, FlightDto.class))
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public FlightDto getFlightById(Long id) {
-//        Flight flight = flightRepository.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
-//        return modelMapper.map(flight, FlightDto.class);
-//    }
-//
-//    @Override
-//    public FlightDto updateFlight(Long id, FlightDto flightDto) {
-//        Flight flight = flightRepository.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
-//        modelMapper.map(flightDto, flight);
-//        flight = flightRepository.save(flight);
-//        return modelMapper.map(flight, FlightDto.class);
-//    }
-//
-//    @Override
-//    public void deleteFlight(Long id) {
-//        flightRepository.deleteById(id);
-//    }
+
+    @Override
+    public FlightDto update(Long id, FlightDto flightDto) {
+        Flight flight = flightRepository.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
+        flight.setFlightLogo(flightDto.getFlightLogo());
+        flight.setFlightNumber(flightDto.getFlightNumber());
+        flight.setAvailableSeats(flightDto.getAvailableSeats());
+        flight.setArrivalAirport(flightDto.getArrivalAirport());
+        flight.setFlightSchedule(flightDto.getFlightSchedule());
+        flight.setDepartureAirport(flightDto.getDepartureAirport());
+        flightRepository.save(flight);
+        return modelMapper.map(flight, FlightDto.class);
+    }
 
     @Override
     public List<FlightDto> searchByAirport(Long airportId) {

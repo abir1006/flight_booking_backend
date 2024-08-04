@@ -25,3 +25,19 @@ INSERT INTO users ( firstname, lastname, email, password, phone, address, role) 
 ('Grace', 'Hernandez', 'grace.hernandez@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W', '7778889999', '606 Cherry St', 'USER'),
 ('Henry', 'Lopez', 'henry.lopez@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W', '8889990000', '707 Ash St', 'ADMIN');
 
+
+-- Insert FlightSchedules
+INSERT INTO flight_schedule (departure_date, arrival_date, departure_time, arrival_time) VALUES
+('2024-08-10', '2024-08-10', '08:00:00', '11:00:00'),
+('2024-08-11', '2024-08-11', '09:00:00', '12:00:00'),
+('2024-08-12', '2024-08-12', '10:00:00', '13:00:00'),
+('2024-08-13', '2024-08-13', '11:00:00', '14:00:00'),
+('2024-08-14', '2024-08-14', '12:00:00', '15:00:00');
+
+-- Insert Flights
+INSERT INTO flight (flight_number, departure_airport_id, arrival_airport_id, flight_schedule_id, available_seats, flight_logo, ticket_price) VALUES
+('FL1234', 1, 2, 1, 150, 'logo1.png', 250.00),
+('FL5678', 2, 3, 2, 200, 'logo2.png', 270.00),
+('FL9101', 3, 4, 3, 180, 'logo3.png', 290.00),
+('FL1122', 4, 5, 4, 160, 'logo4.png', 310.00),
+('FL3344', 5, 6, 5, 170, 'logo5.png', 330.00);

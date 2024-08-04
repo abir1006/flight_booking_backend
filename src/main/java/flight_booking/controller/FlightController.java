@@ -33,31 +33,22 @@ public class FlightController extends GenericController<Long,FlightDto> {
 
     // Admin Panel: Manage flights
     @PostMapping("/admin")
-    public ResponseEntity<FlightDto> createFlight(@RequestBody FlightDto flightDto) {
-        FlightDto createdFlight = flightService.save(flightDto);
-        return new ResponseEntity<>(createdFlight, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/admin")
-    public ResponseEntity<List<FlightDto>> getAllFlights() {
-        List<FlightDto> flights = flightService.findAll();
-        return new ResponseEntity<>(flights, HttpStatus.OK);
-    }
-
-    @GetMapping("/admin/{id}")
-    public ResponseEntity<FlightDto> getFlightById(@PathVariable Long id) {
-        FlightDto flight = flightService.findById(id).get();
-        return new ResponseEntity<>(flight, HttpStatus.OK);
+    public ResponseEntity<FlightDto> create(@RequestBody FlightDto dto) {
+        return new ResponseEntity<>(flightService.save(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/admin/{id}")
-    public ResponseEntity<FlightDto> updateFlight(@PathVariable Long id, @RequestBody FlightDto flightDto) {
-        FlightDto updatedFlight = flightService.update(id, flightDto);
-        return new ResponseEntity<>(updatedFlight, HttpStatus.OK);
+    public ResponseEntity<FlightDto> update(@PathVariable long id, @RequestBody FlightDto dto) {
+        FlightDto updatedDto = flightService.update(id, dto);
+        if (updatedDto != null) {
+            return ResponseEntity.ok(updatedDto);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/admin/{id}")
-    public ResponseEntity<Void> deleteFlight(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable long id) {
         flightService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
