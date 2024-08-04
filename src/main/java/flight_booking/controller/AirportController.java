@@ -23,17 +23,7 @@ public class AirportController extends GenericController<Long, AirportDto> {
         super(airportService);
 
     }
-    //add new different controllers
 
-    @GetMapping("/paged")
-    public Page<AirportDto> pagedAirports(
-            @RequestParam int page,
-            @RequestParam int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return airportService.getPaginatedAirports(pageable);
-
-
-    }
 
 
 }

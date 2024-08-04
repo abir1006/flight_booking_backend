@@ -1,7 +1,11 @@
 package flight_booking.controller.genericcontroller;
 
+import flight_booking.dto.AirportDto;
 import flight_booking.service.GenericService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +47,16 @@ public abstract class GenericController<ID, DTO> {
         return service.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/paged")
+    public Page<DTO> pagedSearch(
+            @RequestParam int page,
+         @RequestParam int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        return service.getPaginated(pageable);
+
+
     }
 }

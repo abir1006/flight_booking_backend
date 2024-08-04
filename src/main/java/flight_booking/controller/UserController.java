@@ -33,11 +33,6 @@ public class UserController extends GenericController<Long, UserDto> {
         return ResponseEntity.ok(userService.getUserByEmail(id));
     }
 
-//    @GetMapping("/passengers")
-//    public ResponseEntity<List<UserDto>> getUserByPassengers(){
-//        return ResponseEntity.ok(userService.getAllByRole(Role.USER));
-//
-//    }
 
 
     @GetMapping("/passengers")

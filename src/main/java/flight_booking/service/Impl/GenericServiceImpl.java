@@ -1,12 +1,17 @@
 package flight_booking.service.Impl;
 
 
+import flight_booking.domain.Airport;
+import flight_booking.dto.AirportDto;
 import flight_booking.dto.BookingDto;
 import flight_booking.repositories.genericrepository.GenericRepository;
 import flight_booking.service.GenericService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,5 +64,19 @@ public abstract class GenericServiceImpl<T, ID, DTO> implements GenericService<I
     public void deleteById(ID id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public Page<DTO> getPaginated(Pageable pageable){
+        Page<T> entities = repository.findAll(pageable);
+        List<DTO> dtos = new ArrayList<>();
+        for (T entity : entities) {
+            DTO dto = modelMapper.map(entity, dtoClass);
+            dtos.add(dto);
+        }
+        return new PageImpl<>(dtos, pageable, entities.getTotalElements());
+    }
+
+
+
 
 }

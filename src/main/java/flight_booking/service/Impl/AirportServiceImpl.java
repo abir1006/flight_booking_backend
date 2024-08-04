@@ -7,13 +7,9 @@ import flight_booking.repositories.AirportRepository;
 import flight_booking.service.AirportService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AirportServiceImpl extends GenericServiceImpl<Airport, Long, AirportDto> implements AirportService {
@@ -30,17 +26,7 @@ public class AirportServiceImpl extends GenericServiceImpl<Airport, Long, Airpor
         this.reportServiceImpl = reportServiceImpl;
     }
 
-    @Override
-    public Page<AirportDto> getPaginatedAirports(Pageable pageable) {
-        Page<Airport> airports = airportRepository.findAll(pageable);
-        List<AirportDto> airportDtos = new ArrayList<>();
-        for (Airport airport : airports) {
-            AirportDto airportDto = modelMapper.map(airport, AirportDto.class);
-            airportDtos.add(airportDto);
-        }
-        return new PageImpl<>(airportDtos, pageable, airports.getTotalElements());
 
-    }
 
     @Override
     public AirportDto save(AirportDto airportDto) {

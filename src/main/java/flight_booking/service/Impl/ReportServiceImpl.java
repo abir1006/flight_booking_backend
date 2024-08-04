@@ -2,11 +2,10 @@ package flight_booking.service.Impl;
 
 import flight_booking.domain.Report;
 import flight_booking.dto.ReportDto;
-import flight_booking.repositories.genericrepository.ReportRepository;
+import flight_booking.repositories.ReportRepository;
 import flight_booking.service.ReportService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
