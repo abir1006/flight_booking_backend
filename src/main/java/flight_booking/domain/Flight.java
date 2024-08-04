@@ -22,7 +22,8 @@ public class Flight {
     @OneToOne
     @JoinColumn(name="arrival_airport_id")
     private Airport arrivalAirport;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="flight_schedule_id")
     private FlightSchedule flightSchedule;
 

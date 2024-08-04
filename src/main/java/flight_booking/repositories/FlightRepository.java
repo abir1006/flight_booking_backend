@@ -1,13 +1,14 @@
 package flight_booking.repositories;
 
 import flight_booking.domain.Flight;
+import flight_booking.repositories.genericrepository.GenericRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface FlightRepository extends JpaRepository<Flight, Long> {
+public interface FlightRepository extends GenericRepository<Flight, Long> {
 
     @Query("SELECT f FROM Flight f WHERE f.departureAirport.id = :airportId OR f.arrivalAirport.id = :airportId")
     List<Flight> findByAirport(Long airportId);

@@ -5,17 +5,18 @@ import flight_booking.dto.FlightDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface FlightService {
+public interface FlightService extends GenericService<Long, FlightDto> {
 
-    FlightDto createFlight(FlightDto flightDto);
-
-    List<FlightDto> getAllFlights();
-
-    FlightDto getFlightById(Long id);
-
-    FlightDto updateFlight(Long id, FlightDto flightDto);
-
-    void deleteFlight(Long id);
+//    FlightDto createFlight(FlightDto flightDto);
+//
+//    List<FlightDto> getAllFlights();
+//
+//    FlightDto getFlightById(Long id);
+//
+//    FlightDto updateFlight(Long id, FlightDto flightDto);
+//
+//    void deleteFlight(Long id);
+    /***/
 
     List<FlightDto> searchByAirport(Long airportId);
 
