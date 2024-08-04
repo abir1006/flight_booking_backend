@@ -39,8 +39,25 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
     @Transactional
     public BookingDto bookFlight(BookingDto bookingDto) {
         bookingDto.setBookingDate(LocalDate.now());
-        bookingDto.setStatus("BOOKED WITHOUT PAYMENT");
+        bookingDto.setStatus("PENDING");
+
+        if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
+            bookingDto.setTotalPrice(bookingDto.getTotalPrice() * 1.8);
+        }
         Booking booking = modelMapper.map(bookingDto, Booking.class);
+
+        Booking finalBooking1 = booking;
+        Flight flight = flightRepository.findById(booking.getFlight().getId())
+                .orElseThrow(() -> new RuntimeException("Flight not found with ID: " + finalBooking1.getFlight().getId()));
+        int passengersCount = bookingDto.getPassengers().size();
+        if (flight.getAvailableSeats() < passengersCount) {
+            throw new RuntimeException("Not enough available seats for flight ID: " + booking.getFlight().getId());
+        }
+        flight.setAvailableSeats(flight.getAvailableSeats() - passengersCount);
+        flightRepository.save(flight);
+
+
+
         final Booking finalBooking = booking;
         booking.setPassengers(
                 bookingDto.getPassengers().stream()
@@ -51,10 +68,10 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
                         })
                         .toList()
         );
+        booking.setTotalPrice(bookingDto.getTotalPrice());
         booking = bookingRepository.save(booking);
         return modelMapper.map(booking, BookingDto.class);
     }
-
 
     @Override
     @Transactional
@@ -62,6 +79,11 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
         booking.setStatus("CANCELLED");
+
+        Flight flight = booking.getFlight();
+        flight.setAvailableSeats(flight.getAvailableSeats() + booking.getPassengers().size());
+        flightRepository.save(flight);
+
         booking = bookingRepository.save(booking);
         return modelMapper.map(booking, BookingDto.class);
     }
@@ -100,18 +122,6 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
             throw new RuntimeException("Payment confirmation failed for booking ID: " + bookingId);
         }
         booking.setStatus("CONFIRMED");
-
-        Flight flight = booking.getFlight();
-        int passengersCount = booking.getPassengers().size();
-        if (flight.getAvailableSeats() < passengersCount) {
-            throw new RuntimeException("Not enough available seats for booking ID: " + bookingId);
-        }
-        flight.setAvailableSeats(flight.getAvailableSeats() - passengersCount);
-        flightRepository.save(flight);
-
-        if ("ROUND_TRIP".equalsIgnoreCase(booking.getTripType())) {
-            booking.setTotalPrice(booking.getTotalPrice() * 1.8);
-        }
 
         String ticket = generateTicket(bookingId);
 

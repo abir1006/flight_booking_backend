@@ -20,7 +20,7 @@ public class BookingDto {
     private String status;
     private String tripType;
     private Double totalPrice;
-    private List<Long> flightIds;
+    private Long flightId;
     private Long passengerId;
     private List<PassengerDto> passengers;
     private String ticket;

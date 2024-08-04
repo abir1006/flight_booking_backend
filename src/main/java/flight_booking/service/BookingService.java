@@ -11,7 +11,6 @@ public interface BookingService extends GenericService<Long, BookingDto> {
     BookingDto cancelBooking(Long bookingId);
     String generateTicket(Long bookingId);
 
-    @Transactional
     BookingDto confirmBooking(Long bookingId);
     // Additional methods specific to Booking  here
 }
