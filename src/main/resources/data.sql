@@ -1,15 +1,37 @@
 -- Insert sample data into the airport table
 INSERT INTO airports (name, city, country, code) VALUES
-('Hartsfield-Jackson Atlanta International Airport', 'Atlanta', 'United States', 'ATL'),
-('Beijing Capital International Airport', 'Beijing', 'China', 'PEK'),
-('Los Angeles International Airport', 'Los Angeles', 'United States', 'LAX'),
-('Dubai International Airport', 'Dubai', 'United Arab Emirates', 'DXB'),
-('Tokyo Haneda Airport', 'Tokyo', 'Japan', 'HND'),
-('London Heathrow Airport', 'London', 'United Kingdom', 'LHR'),
-('Paris Charles de Gaulle Airport', 'Paris', 'France', 'CDG'),
-('Amsterdam Schiphol Airport', 'Amsterdam', 'Netherlands', 'AMS'),
-('Singapore Changi Airport', 'Singapore', 'Singapore', 'SIN'),
-('Incheon International Airport', 'Seoul', 'South Korea', 'ICN');
+ ('Hartsfield-Jackson Atlanta International Airport', 'Atlanta', 'United States', 'ATL'),
+ ('Beijing Capital International Airport', 'Beijing', 'China', 'PEK'),
+ ('Los Angeles International Airport', 'Los Angeles', 'United States', 'LAX'),
+ ('Dubai International Airport', 'Dubai', 'United Arab Emirates', 'DXB'),
+ ('Tokyo Haneda Airport', 'Tokyo', 'Japan', 'HND'),
+ ('London Heathrow Airport', 'London', 'United Kingdom', 'LHR'),
+ ('Paris Charles de Gaulle Airport', 'Paris', 'France', 'CDG'),
+ ('Amsterdam Schiphol Airport', 'Amsterdam', 'Netherlands', 'AMS'),
+ ('Singapore Changi Airport', 'Singapore', 'Singapore', 'SIN'),
+ ('Incheon International Airport', 'Seoul', 'South Korea', 'ICN'),
+ ('Hong Kong International Airport', 'Hong Kong', 'China', 'HKG'),
+ ('Shanghai Pudong International Airport', 'Shanghai', 'China', 'PVG'),
+ ('Dallas/Fort Worth International Airport', 'Dallas', 'United States', 'DFW'),
+ ('John F. Kennedy International Airport', 'New York', 'United States', 'JFK'),
+ ('Denver International Airport', 'Denver', 'United States', 'DEN'),
+ ('Sydney Kingsford Smith Airport', 'Sydney', 'Australia', 'SYD'),
+ ('Toronto Pearson International Airport', 'Toronto', 'Canada', 'YYZ'),
+ ('Munich Airport', 'Munich', 'Germany', 'MUC'),
+ ('Zurich Airport', 'Zurich', 'Switzerland', 'ZRH'),
+ ('Singapore Changi Airport', 'Singapore', 'Singapore', 'SIN'),
+ ('Dubai International Airport', 'Dubai', 'United Arab Emirates', 'DXB'),
+ ('Bangkok Suvarnabhumi Airport', 'Bangkok', 'Thailand', 'BKK'),
+ ('Istanbul Airport', 'Istanbul', 'Turkey', 'IST'),
+ ('Dubai International Airport', 'Dubai', 'United Arab Emirates', 'DXB'),
+ ('Kuala Lumpur International Airport', 'Kuala Lumpur', 'Malaysia', 'KUL'),
+ ('San Francisco International Airport', 'San Francisco', 'United States', 'SFO'),
+ ('JFK International Airport', 'New York', 'United States', 'JFK'),
+ ('Seoul Gimpo International Airport', 'Seoul', 'South Korea', 'GMP'),
+ ('Delhi Indira Gandhi International Airport', 'Delhi', 'India', 'DEL'),
+ ('Vancouver International Airport', 'Vancouver', 'Canada', 'YVR'),
+ ('Moscow Sheremetyevo International Airport', 'Moscow', 'Russia', 'SVO');
+
 
 -- Insert users
 -- password for all user is "123"
