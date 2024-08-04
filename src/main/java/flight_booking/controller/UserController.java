@@ -35,7 +35,7 @@ public class UserController extends GenericController<Long, UserDto> {
 
 
 
-    @GetMapping("/passengers")
+    @GetMapping("/registered-users")
     public Page<UserDto> getAllPassengers(
             @RequestParam int page,
             @RequestParam int size) {
