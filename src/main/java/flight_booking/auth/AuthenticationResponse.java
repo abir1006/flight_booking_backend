@@ -1,6 +1,5 @@
 package flight_booking.auth;
 
-import flight_booking.domain.User;
 import flight_booking.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

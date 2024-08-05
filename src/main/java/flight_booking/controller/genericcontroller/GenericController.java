@@ -1,6 +1,6 @@
 package flight_booking.controller.genericcontroller;
 
-import flight_booking.dto.AirportDto;
+
 import flight_booking.service.GenericService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
