@@ -19,18 +19,19 @@ public class Booking {
 
     private LocalDate bookingDate;
 
-    //status could be .1. booked without payment 2. booked with payment(Confirm booking) 3. e ticket generated/msg sent
+    //status could be .1. Pending 2. booked with payment(Confirm booking) 3. e ticket generated/msg sent
     private String status;
 
     private String tripType;
 
     private double totalPrice;
 
-    @OneToOne
-    @JoinColumn(name="flight_id")
+    @ManyToOne
+    @JoinColumn(name = "flight_id")
     private Flight flight;
 
-//    @OneToOne
+
+    //    @OneToOne
 //    @JoinColumn(name = "passenger_id")
 //    private User passenger;
     //Changed the relationship in order for the booking to have multiple passengers
