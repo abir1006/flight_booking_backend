@@ -1,6 +1,5 @@
 package flight_booking.domain;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,13 +14,17 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(unique = true, nullable = false)
     private String flightNumber;
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "departure_airport_id")
     private Airport departureAirport;
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name="arrival_airport_id")
     private Airport arrivalAirport;
+
     @Embedded
     private FlightSchedule flightSchedule;
 
@@ -29,9 +32,5 @@ public class Flight {
 
     private String flightLogo;
 
-    //its equal for all kind of seats ..no seat classes
     private double ticketPrice;
-
-
-
 }
