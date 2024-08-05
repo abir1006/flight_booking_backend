@@ -7,13 +7,18 @@ import flight_booking.dto.BookingDto;
 import flight_booking.repositories.BookingRepository;
 import flight_booking.repositories.FlightRepository;
 import flight_booking.service.BookingService;
+import flight_booking.service.NotificationService;
 import flight_booking.service.PaymentService;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import static flight_booking.Util.PdfGenerator.generateTicketPdf;
 
 @Service
 public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, BookingDto> implements BookingService {
@@ -25,6 +30,8 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
     private final PaymentService paymentService;
     @Autowired
     private final FlightRepository flightRepository;
+    @Autowired
+    private NotificationService notificationService;
 
     @Autowired
     public BookingServiceImpl(BookingRepository repository, ModelMapper modelMapper, BookingRepository bookingRepository, PaymentService paymentService, FlightRepository flightRepository) {
@@ -55,7 +62,6 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         }
         flight.setAvailableSeats(flight.getAvailableSeats() - passengersCount);
         flightRepository.save(flight);
-
 
 
         final Booking finalBooking = booking;
@@ -122,13 +128,69 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
             throw new RuntimeException("Payment confirmation failed for booking ID: " + bookingId);
         }
         booking.setStatus("CONFIRMED");
-
         String ticket = generateTicket(bookingId);
+
+        byte[] ticketPdf = generateTicketPdf(booking);
+
+        try {
+            notificationService.sendEmailWithAttachment(
+                    booking.getPassengers().get(0).getEmail(),
+                    "Flight Ticket",
+                    "Please find attached your flight ticket.",
+                    ticketPdf
+            );
+        } catch (MessagingException e) {
+            throw new RuntimeException("Failed to send email with ticket PDF for booking ID: " + bookingId, e);
+        }
 
         booking = bookingRepository.save(booking);
         BookingDto bookingDto = modelMapper.map(booking, BookingDto.class);
         bookingDto.setTicket(ticket);
 
         return bookingDto;
+    }
+
+    @Override
+    @Transactional
+    public BookingDto updateBooking(Long bookingId, BookingDto bookingDto) {
+        Booking existingBooking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found with ID: " + bookingId));
+
+        Flight existingFlight = existingBooking.getFlight();
+        int originalPassengerCount = existingBooking.getPassengers().size();
+
+        existingFlight.setAvailableSeats(existingFlight.getAvailableSeats() + originalPassengerCount);
+        flightRepository.save(existingFlight);
+
+        Flight newFlight = flightRepository.findById(bookingDto.getFlightId())
+                .orElseThrow(() -> new RuntimeException("Flight not found with ID: " + bookingDto.getFlightId()));
+        int newPassengerCount = bookingDto.getPassengers().size();
+
+        if (newFlight.getAvailableSeats() < newPassengerCount) {
+            throw new RuntimeException("Not enough available seats for flight ID: " + bookingDto.getFlightId());
+        }
+
+        newFlight.setAvailableSeats(newFlight.getAvailableSeats() - newPassengerCount);
+        flightRepository.save(newFlight);
+
+        existingBooking.setFlight(newFlight);
+        existingBooking.setTripType(bookingDto.getTripType());
+        existingBooking.setBookingDate(LocalDate.now());
+        existingBooking.setTotalPrice(bookingDto.getTotalPrice());
+
+        if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
+            existingBooking.setTotalPrice(existingBooking.getTotalPrice() * 1.8);
+        }
+
+        List<Passenger> updatedPassengers = bookingDto.getPassengers().stream()
+                .map(passengerDto -> {
+                    Passenger passenger = modelMapper.map(passengerDto, Passenger.class);
+                    passenger.setBooking(existingBooking);
+                    return passenger;
+                }).toList();
+        existingBooking.setPassengers(updatedPassengers);
+
+        Booking updatedBooking = bookingRepository.save(existingBooking);
+        return modelMapper.map(updatedBooking, BookingDto.class);
     }
 }

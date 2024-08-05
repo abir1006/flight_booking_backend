@@ -40,4 +40,9 @@ public class BookingController extends GenericController<Long, BookingDto> {
         String ticket = bookingService.generateTicket(bookingId);
         return ResponseEntity.ok(ticket);
     }
+    @PutMapping("/updateBooking/{id}")
+    public ResponseEntity<BookingDto> updateBooking(@PathVariable Long id, @RequestBody BookingDto bookingDto) {
+        BookingDto updatedBooking = bookingService.updateBooking(id, bookingDto);
+        return ResponseEntity.ok(updatedBooking);
+    }
 }
