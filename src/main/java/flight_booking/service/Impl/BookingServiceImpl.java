@@ -7,7 +7,7 @@ import flight_booking.dto.BookingDto;
 import flight_booking.repositories.BookingRepository;
 import flight_booking.repositories.FlightRepository;
 import flight_booking.service.BookingService;
-import flight_booking.service.NotificationService;
+//import flight_booking.service.NotificationService;
 import flight_booking.service.PaymentService;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
@@ -30,8 +30,8 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
     private final PaymentService paymentService;
     @Autowired
     private final FlightRepository flightRepository;
-    @Autowired
-    private NotificationService notificationService;
+
+    //private NotificationService notificationService;
 
     @Autowired
     public BookingServiceImpl(BookingRepository repository, ModelMapper modelMapper, BookingRepository bookingRepository, PaymentService paymentService, FlightRepository flightRepository) {
@@ -130,18 +130,18 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         booking.setStatus("CONFIRMED");
         String ticket = generateTicket(bookingId);
 
-        byte[] ticketPdf = generateTicketPdf(booking);
-
-        try {
-            notificationService.sendEmailWithAttachment(
-                    booking.getPassengers().get(0).getEmail(),
-                    "Flight Ticket",
-                    "Please find attached your flight ticket.",
-                    ticketPdf
-            );
-        } catch (MessagingException e) {
-            throw new RuntimeException("Failed to send email with ticket PDF for booking ID: " + bookingId, e);
-        }
+//        byte[] ticketPdf = generateTicketPdf(booking);
+//
+//        try {
+//            notificationService.sendEmailWithAttachment(
+//                    booking.getPassengers().get(0).getEmail(),
+//                    "Flight Ticket",
+//                    "Please find attached your flight ticket.",
+//                    ticketPdf
+//            );
+//        } catch (MessagingException e) {
+//            throw new RuntimeException("Failed to send email with ticket PDF for booking ID: " + bookingId, e);
+//        }
 
         booking = bookingRepository.save(booking);
         BookingDto bookingDto = modelMapper.map(booking, BookingDto.class);
