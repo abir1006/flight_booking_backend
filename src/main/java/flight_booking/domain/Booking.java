@@ -21,16 +21,17 @@ public class Booking {
 
     //status could be .1. Pending 2. booked with payment(Confirm booking) 3. e ticket generated/msg sent
     private String status;
-
     private String tripType;
-
     private double totalPrice;
+    private LocalDate returnDate;
 
     @ManyToOne
     @JoinColumn(name = "flight_id")
     private Flight flight;
 
-
+    @ManyToOne
+    @JoinColumn(name = "return_flight_id", nullable = true) // New field for return flight
+    private Flight returnFlight;
     //    @OneToOne
 //    @JoinColumn(name = "passenger_id")
 //    private User passenger;

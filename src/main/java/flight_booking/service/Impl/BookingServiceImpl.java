@@ -48,23 +48,40 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         bookingDto.setBookingDate(LocalDate.now());
         bookingDto.setStatus("PENDING");
 
-        if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
-            bookingDto.setTotalPrice(bookingDto.getTotalPrice() * 1.8);
-        }
-        Booking booking = modelMapper.map(bookingDto, Booking.class);
-
-        Booking finalBooking1 = booking;
-        Flight flight = flightRepository.findById(booking.getFlight().getId())
-                .orElseThrow(() -> new RuntimeException("Flight not found with ID: " + finalBooking1.getFlight().getId()));
+        Flight flight = flightRepository.findById(bookingDto.getFlightId())
+                .orElseThrow(() -> new RuntimeException("Flight not found with ID: " + bookingDto.getFlightId()));
         int passengersCount = bookingDto.getPassengers().size();
         if (flight.getAvailableSeats() < passengersCount) {
-            throw new RuntimeException("Not enough available seats for flight ID: " + booking.getFlight().getId());
+            throw new RuntimeException("Not enough available seats for flight ID: " + bookingDto.getFlightId());
         }
         flight.setAvailableSeats(flight.getAvailableSeats() - passengersCount);
         flightRepository.save(flight);
 
+        bookingDto.setDepartureDate(flight.getFlightSchedule().getDepartureDate());
+        bookingDto.setDepartureTime(flight.getFlightSchedule().getDepartureTime());
+        bookingDto.setArrivalDate(flight.getFlightSchedule().getArrivalDate());
+        bookingDto.setArrivalTime(flight.getFlightSchedule().getArrivalTime());
 
-        final Booking finalBooking = booking;
+        if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
+            Flight returnFlight = flightRepository.findById(bookingDto.getReturnFlightId())
+                    .orElseThrow(() -> new RuntimeException("Return flight not found with ID: " + bookingDto.getReturnFlightId()));
+            int returnPassengersCount = bookingDto.getPassengers().size();
+            if (returnFlight.getAvailableSeats() < returnPassengersCount) {
+                throw new RuntimeException("Not enough available seats for return flight ID: " + bookingDto.getReturnFlightId());
+            }
+            returnFlight.setAvailableSeats(returnFlight.getAvailableSeats() - returnPassengersCount);
+            flightRepository.save(returnFlight);
+
+            bookingDto.setReturnDepartureDate(returnFlight.getFlightSchedule().getDepartureDate());
+            bookingDto.setReturnDepartureTime(returnFlight.getFlightSchedule().getDepartureTime());
+            bookingDto.setReturnArrivalDate(returnFlight.getFlightSchedule().getArrivalDate());
+            bookingDto.setReturnArrivalTime(returnFlight.getFlightSchedule().getArrivalTime());
+
+            bookingDto.setTotalPrice(bookingDto.getTotalPrice() * 1.8);
+        }
+
+        Booking booking = modelMapper.map(bookingDto, Booking.class);
+        Booking finalBooking = booking;
         booking.setPassengers(
                 bookingDto.getPassengers().stream()
                         .map(passengerDto -> {
@@ -76,7 +93,24 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         );
         booking.setTotalPrice(bookingDto.getTotalPrice());
         booking = bookingRepository.save(booking);
-        return modelMapper.map(booking, BookingDto.class);
+
+        // Map the schedule information to the BookingDto
+        BookingDto savedBookingDto = modelMapper.map(booking, BookingDto.class);
+        savedBookingDto.setDepartureDate(flight.getFlightSchedule().getDepartureDate());
+        savedBookingDto.setDepartureTime(flight.getFlightSchedule().getDepartureTime());
+        savedBookingDto.setArrivalDate(flight.getFlightSchedule().getArrivalDate());
+        savedBookingDto.setArrivalTime(flight.getFlightSchedule().getArrivalTime());
+
+        if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
+            Flight returnFlight = flightRepository.findById(bookingDto.getReturnFlightId())
+                    .orElseThrow(() -> new RuntimeException("Return flight not found with ID: " + bookingDto.getReturnFlightId()));
+            savedBookingDto.setReturnDepartureDate(returnFlight.getFlightSchedule().getDepartureDate());
+            savedBookingDto.setReturnDepartureTime(returnFlight.getFlightSchedule().getDepartureTime());
+            savedBookingDto.setReturnArrivalDate(returnFlight.getFlightSchedule().getArrivalDate());
+            savedBookingDto.setReturnArrivalTime(returnFlight.getFlightSchedule().getArrivalTime());
+        }
+
+        return savedBookingDto;
     }
 
     @Override
