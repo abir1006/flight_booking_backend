@@ -5,6 +5,7 @@ import flight_booking.repositories.genericrepository.GenericRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,7 +18,4 @@ public interface FlightRepository extends GenericRepository<Flight, Long>, Fligh
     List<Flight> findByFlightSchedule_DepartureDateTimeBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     List<Flight> findByAvailableSeatsGreaterThanEqual(int availableSeats);
-
-    //There should be Airplane Entity
-//    List<Flight> findByPlaneModel(String planeModel);
 }

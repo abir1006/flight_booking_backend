@@ -45,6 +45,41 @@ public class FlightRepositoryCustomImpl implements FlightRepositoryCustom {
 
         query.where(predicates.toArray(new Predicate[0]));
 
-        return entityManager.createQuery(query).getResultList();
+        List<Flight> outboundFlights = entityManager.createQuery(query).getResultList();
+
+        // Reverse criteria query for return flights
+        CriteriaQuery<Flight> reverseQuery = cb.createQuery(Flight.class);
+        Root<Flight> reverseFlight = reverseQuery.from(Flight.class);
+        List<Predicate> reversePredicates = new ArrayList<>();
+
+        if (departureAirportId != null) {
+            reversePredicates.add(cb.equal(reverseFlight.get("arrivalAirport").get("id"), departureAirportId));
+        }
+        if (arrivalAirportId != null) {
+            reversePredicates.add(cb.equal(reverseFlight.get("departureAirport").get("id"), arrivalAirportId));
+        }
+        if (startDate != null) {
+            reversePredicates.add(cb.greaterThanOrEqualTo(reverseFlight.get("flightSchedule").get("departureDate"), startDate));
+        }
+        if (endDate != null) {
+            reversePredicates.add(cb.lessThanOrEqualTo(reverseFlight.get("flightSchedule").get("departureDate"), endDate));
+        }
+        if (travellers != null) {
+            reversePredicates.add(cb.greaterThanOrEqualTo(reverseFlight.get("availableSeats"), travellers));
+        }
+
+        reverseQuery.where(reversePredicates.toArray(new Predicate[0]));
+
+        List<Flight> returnFlights = entityManager.createQuery(reverseQuery).getResultList();
+
+        // Combine outbound and return flights
+        List<Flight> allFlights = new ArrayList<>();
+        allFlights.addAll(outboundFlights);
+        allFlights.addAll(returnFlights);
+
+        // Sort flights by departure date
+        allFlights.sort((f1, f2) -> f1.getFlightSchedule().getDepartureDate().compareTo(f2.getFlightSchedule().getDepartureDate()));
+
+        return allFlights;
     }
 }

@@ -30,7 +30,10 @@ public class Flight {
 
     private int availableSeats;
 
-    private String flightLogo;
-
     private double ticketPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "airline_id")
+
+    private Airline airline;
 }

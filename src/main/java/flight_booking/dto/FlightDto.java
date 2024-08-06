@@ -22,7 +22,8 @@ public class FlightDto {
     private FlightSchedule flightSchedule;
     private int availableSeats;
     private Double ticketPrice;
-    private String flightLogo;
+    private String airlineName;
+    private String airlineLogo;
 
     // Getters and Setters
 }

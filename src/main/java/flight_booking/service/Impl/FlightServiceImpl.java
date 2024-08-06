@@ -32,7 +32,6 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
     @Override
     public FlightDto update(Long id, FlightDto flightDto) {
         Flight flight = flightRepository.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
-        flight.setFlightLogo(flightDto.getFlightLogo());
         flight.setFlightNumber(flightDto.getFlightNumber());
         flight.setAvailableSeats(flightDto.getAvailableSeats());
         flight.setArrivalAirport(flightDto.getArrivalAirport());
@@ -67,7 +66,12 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
     public List<FlightDto> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
         List<Flight> flights = flightRepository.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
         return flights.stream()
-                .map(flight -> modelMapper.map(flight, FlightDto.class))
+                .map(flight -> {
+                    FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
+                    flightDto.setAirlineName(flight.getAirline().getAirlineName());
+                    flightDto.setAirlineLogo(flight.getAirline().getAirlineLogo());
+                    return flightDto;
+                })
                 .collect(Collectors.toList());
     }
 

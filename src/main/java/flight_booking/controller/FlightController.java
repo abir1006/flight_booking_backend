@@ -20,7 +20,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/flights")
-
 public class FlightController extends GenericController<Long,FlightDto> {
 
 
@@ -75,14 +74,15 @@ public class FlightController extends GenericController<Long,FlightDto> {
     }
 
     @GetMapping("/search")
-    public List<FlightDto> searchFlights(
+    public ResponseEntity<List<FlightDto>> searchFlights(
             @RequestParam(required = false) Long departureAirportId,
             @RequestParam(required = false) Long arrivalAirportId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(required = false) Integer travellers) {
 
-        return flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
+        List<FlightDto> flights = flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
+        return ResponseEntity.ok(flights);
     }
 
     //There should be Airplane Entity Model
