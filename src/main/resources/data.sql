@@ -255,8 +255,49 @@ VALUES (1, 'AA1001', '2024-09-01', '10:00:00', 150, '2024-09-01', '06:00:00', 50
        (83, 'DL14002', '2024-09-05', '12:00:00', 150, '2024-09-05', '08:00:00', 700.00, 2, 27, 1),
        (84, 'UA14002', '2024-09-06', '14:00:00', 150, '2024-09-06', '10:00:00', 750.00, 3, 27, 1);
 
-
-
+-- Insert sample booking data
+-- INSERT INTO booking (booking_date, status, trip_type, total_price, flight_id, return_flight_id, return_date)
+-- VALUES
+--     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 1, NULL, NULL),
+--     ('2024-08-02', 'PENDING', 'ROUND_TRIP', 450.00, 2, 1, '2024-09-02');
+--     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 2, NULL, NULL),
+--     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 1, NULL, NULL),
+--     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 2, NULL, NULL),
+--     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 1, NULL, NULL),
+--     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 2, NULL, NULL),
+--     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 1, NULL, NULL),
+--     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 2, NULL, NULL);
+--
+--
+--
+-- -- Insert sample passenger data
+-- INSERT INTO passenger (first_name, last_name, email, phone, address, booking_id)
+-- VALUES
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Jane', 'Doe', 'jane.doe@example.com', '0987654321', '456 Oak Avenue', 1),
+--     ('John', 'Smith', 'john.smith@example.com', '5551234567', '789 Pine Road', 2);
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
+--     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 2);
+--     ('Jane', 'Doe', 'jane.doe@example.com', '0987654321', '456 Oak Avenue', 2),
+--     ('John', 'Smith', 'john.smith@example.com', '5551234567', '789 Pine Road', 2),
+--     ('Alice', 'Johnson', 'alice.johnson@example.com', '5559876543', '101 Maple Street', 2),
+--     ('Bob', 'Brown', 'bob.brown@example.com', '5555555555', '202 Cedar Lane', 2),
+--     ('Charlie', 'Davis', 'charlie.davis@example.com', '5554444444', '303 Birch Boulevard', 2),
+--     ('Diana', 'Evans', 'diana.evans@example.com', '5553333333', '404 Pine Avenue', 1),
+--     ('Edward', 'Green', 'edward.green@example.com', '5552222222', '505 Spruce Street', 3),
+--     ('Fiona', 'Hill', 'fiona.hill@example.com', '5551111111', '606 Willow Road', 4),
+--     ('George', 'Ingram', 'george.ingram@example.com', '5550000000', '707 Fir Place', 5);
+--
+--
 
 
 
