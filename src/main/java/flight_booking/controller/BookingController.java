@@ -3,8 +3,13 @@ package flight_booking.controller;
 import flight_booking.controller.genericcontroller.GenericController;
 import flight_booking.dto.BookingDto;
 import flight_booking.service.BookingService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/bookings")
@@ -44,5 +49,15 @@ public class BookingController extends GenericController<Long, BookingDto> {
     public ResponseEntity<BookingDto> updateBooking(@PathVariable Long id, @RequestBody BookingDto bookingDto) {
         BookingDto updatedBooking = bookingService.updateBooking(id, bookingDto);
         return ResponseEntity.ok(updatedBooking);
+    }
+    @GetMapping("/by-passenger-email")
+    public ResponseEntity<Page<BookingDto>> getBookingsByPassengerEmail(
+            @RequestParam String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BookingDto> bookings = bookingService.getBookingsByPassengerEmail(email, pageable);
+        return ResponseEntity.ok(bookings);
     }
 }

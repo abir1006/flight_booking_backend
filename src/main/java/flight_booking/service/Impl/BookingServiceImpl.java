@@ -13,10 +13,13 @@ import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static flight_booking.Util.PdfGenerator.generateTicketPdf;
 
@@ -193,9 +196,11 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         Flight existingFlight = existingBooking.getFlight();
         int originalPassengerCount = existingBooking.getPassengers().size();
 
+        // Restore the available seats for the original flight
         existingFlight.setAvailableSeats(existingFlight.getAvailableSeats() + originalPassengerCount);
         flightRepository.save(existingFlight);
 
+        // Retrieve and update the new flight
         Flight newFlight = flightRepository.findById(bookingDto.getFlightId())
                 .orElseThrow(() -> new RuntimeException("Flight not found with ID: " + bookingDto.getFlightId()));
         int newPassengerCount = bookingDto.getPassengers().size();
@@ -212,8 +217,26 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         existingBooking.setBookingDate(LocalDate.now());
         existingBooking.setTotalPrice(bookingDto.getTotalPrice());
 
+
+        bookingDto.setDepartureDate(newFlight.getFlightSchedule().getDepartureDate());
+        bookingDto.setDepartureTime(newFlight.getFlightSchedule().getDepartureTime());
+        bookingDto.setArrivalDate(newFlight.getFlightSchedule().getArrivalDate());
+        bookingDto.setArrivalTime(newFlight.getFlightSchedule().getArrivalTime());
+
         if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
-            existingBooking.setTotalPrice(existingBooking.getTotalPrice() * 1.8);
+            Flight returnFlight = flightRepository.findById(bookingDto.getReturnFlightId())
+                    .orElseThrow(() -> new RuntimeException("Return flight not found with ID: " + bookingDto.getReturnFlightId()));
+
+            if (returnFlight.getAvailableSeats() < newPassengerCount) {
+                throw new RuntimeException("Not enough available seats for return flight ID: " + bookingDto.getReturnFlightId());
+            }
+
+            returnFlight.setAvailableSeats(returnFlight.getAvailableSeats() - newPassengerCount);
+            flightRepository.save(returnFlight);
+            bookingDto.setReturnDepartureDate(returnFlight.getFlightSchedule().getDepartureDate());
+            bookingDto.setReturnDepartureTime(returnFlight.getFlightSchedule().getDepartureTime());
+            bookingDto.setReturnArrivalDate(returnFlight.getFlightSchedule().getArrivalDate());
+            bookingDto.setReturnArrivalTime(returnFlight.getFlightSchedule().getArrivalTime());
         }
 
         List<Passenger> updatedPassengers = bookingDto.getPassengers().stream()
@@ -227,4 +250,13 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         Booking updatedBooking = bookingRepository.save(existingBooking);
         return modelMapper.map(updatedBooking, BookingDto.class);
     }
+
+    @Override
+    @Transactional
+    public Page<BookingDto> getBookingsByPassengerEmail(String email, Pageable pageable) {
+        Page<Booking> bookings = bookingRepository.findBookingsByPassengerEmail(email, pageable);
+        return bookings.map(booking -> modelMapper.map(booking, BookingDto.class));
+    }
+
+
 }
