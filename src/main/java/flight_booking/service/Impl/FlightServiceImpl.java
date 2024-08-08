@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +66,7 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
     @Override
     public List<FlightDto> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
         List<Flight> flights = flightRepository.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
-        return flights.stream()
+        List<FlightDto> flightDtos = flights.stream()
                 .map(flight -> {
                     FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
                     flightDto.setAirlineName(flight.getAirline().getAirlineName());
@@ -73,6 +74,26 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
                     return flightDto;
                 })
                 .collect(Collectors.toList());
+
+        // Pair the flights if startDate and endDate are provided
+        if (startDate != null && endDate != null) {
+            List<FlightDto> pairedFlights = new ArrayList<>();
+            for (FlightDto flight : flightDtos) {
+                if (flight.getFlightSchedule().getDepartureDate().equals(startDate)) {
+                    for (FlightDto returnFlight : flightDtos) {
+                        if (returnFlight.getFlightSchedule().getDepartureDate().equals(endDate) &&
+                                returnFlight.getDepartureAirport().getId() == (flight.getArrivalAirport().getId()) &&
+                                returnFlight.getArrivalAirport().getId() == (flight.getDepartureAirport().getId())) {
+                            pairedFlights.add(flight);
+                            pairedFlights.add(returnFlight);
+                        }
+                    }
+                }
+            }
+            return pairedFlights;
+        }
+
+        return flightDtos;
     }
 
     //There should be Airplane Entity model

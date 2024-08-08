@@ -20,7 +20,7 @@ public class FlightRepositoryCustomImpl implements FlightRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Flight> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
+    public List<Flight> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate flightDate, LocalDate returnDate, Integer travellers) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Flight> query = cb.createQuery(Flight.class);
         Root<Flight> flight = query.from(Flight.class);
@@ -33,53 +33,37 @@ public class FlightRepositoryCustomImpl implements FlightRepositoryCustom {
         if (arrivalAirportId != null) {
             predicates.add(cb.equal(flight.get("arrivalAirport").get("id"), arrivalAirportId));
         }
-        if (startDate != null) {
-            predicates.add(cb.greaterThanOrEqualTo(flight.get("flightSchedule").get("departureDate"), startDate));
-        }
-        if (endDate != null) {
-            predicates.add(cb.lessThanOrEqualTo(flight.get("flightSchedule").get("departureDate"), endDate));
+        if (flightDate != null) {
+            predicates.add(cb.equal(flight.get("flightSchedule").get("departureDate"), flightDate));
         }
         if (travellers != null) {
             predicates.add(cb.greaterThanOrEqualTo(flight.get("availableSeats"), travellers));
         }
 
         query.where(predicates.toArray(new Predicate[0]));
-
         List<Flight> outboundFlights = entityManager.createQuery(query).getResultList();
 
-        // Reverse criteria query for return flights
-        CriteriaQuery<Flight> reverseQuery = cb.createQuery(Flight.class);
-        Root<Flight> reverseFlight = reverseQuery.from(Flight.class);
-        List<Predicate> reversePredicates = new ArrayList<>();
+        if (returnDate != null) {
+            CriteriaQuery<Flight> returnQuery = cb.createQuery(Flight.class);
+            Root<Flight> returnFlight = returnQuery.from(Flight.class);
+            List<Predicate> returnPredicates = new ArrayList<>();
 
-        if (departureAirportId != null) {
-            reversePredicates.add(cb.equal(reverseFlight.get("arrivalAirport").get("id"), departureAirportId));
+            if (departureAirportId != null) {
+                returnPredicates.add(cb.equal(returnFlight.get("arrivalAirport").get("id"), departureAirportId));
+            }
+            if (arrivalAirportId != null) {
+                returnPredicates.add(cb.equal(returnFlight.get("departureAirport").get("id"), arrivalAirportId));
+            }
+            returnPredicates.add(cb.equal(returnFlight.get("flightSchedule").get("departureDate"), returnDate));
+            if (travellers != null) {
+                returnPredicates.add(cb.greaterThanOrEqualTo(returnFlight.get("availableSeats"), travellers));
+            }
+
+            returnQuery.where(returnPredicates.toArray(new Predicate[0]));
+            List<Flight> returnFlights = entityManager.createQuery(returnQuery).getResultList();
+            outboundFlights.addAll(returnFlights);
         }
-        if (arrivalAirportId != null) {
-            reversePredicates.add(cb.equal(reverseFlight.get("departureAirport").get("id"), arrivalAirportId));
-        }
-        if (startDate != null) {
-            reversePredicates.add(cb.greaterThanOrEqualTo(reverseFlight.get("flightSchedule").get("departureDate"), startDate));
-        }
-        if (endDate != null) {
-            reversePredicates.add(cb.lessThanOrEqualTo(reverseFlight.get("flightSchedule").get("departureDate"), endDate));
-        }
-        if (travellers != null) {
-            reversePredicates.add(cb.greaterThanOrEqualTo(reverseFlight.get("availableSeats"), travellers));
-        }
 
-        reverseQuery.where(reversePredicates.toArray(new Predicate[0]));
-
-        List<Flight> returnFlights = entityManager.createQuery(reverseQuery).getResultList();
-
-        // Combine outbound and return flights
-        List<Flight> allFlights = new ArrayList<>();
-        allFlights.addAll(outboundFlights);
-        allFlights.addAll(returnFlights);
-
-        // Sort flights by departure date
-        allFlights.sort((f1, f2) -> f1.getFlightSchedule().getDepartureDate().compareTo(f2.getFlightSchedule().getDepartureDate()));
-
-        return allFlights;
+        return outboundFlights;
     }
 }

@@ -56,9 +56,19 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         }
         flight.setAvailableSeats(flight.getAvailableSeats() - passengersCount);
         flightRepository.save(flight);
-
+        bookingDto.setAirlineName(flight.getAirline().getAirlineName());
+        bookingDto.setFlightNumber(flight.getFlightNumber());
+        bookingDto.setDepartureAirportName(flight.getDepartureAirport().getName());
+        bookingDto.setDepartureAirportCity(flight.getDepartureAirport().getCity());
+        bookingDto.setDepartureAirportCountry(flight.getDepartureAirport().getCountry());
+        bookingDto.setCodeDepartureAirport(flight.getDepartureAirport().getCode());
         bookingDto.setDepartureDate(flight.getFlightSchedule().getDepartureDate());
         bookingDto.setDepartureTime(flight.getFlightSchedule().getDepartureTime());
+
+        bookingDto.setArrivalAirportName(flight.getArrivalAirport().getName());
+        bookingDto.setArrivalAirportCity(flight.getArrivalAirport().getCity());
+        bookingDto.setArrivalAirportCountry(flight.getArrivalAirport().getCountry());
+        bookingDto.setCodeArrivalAirport(flight.getArrivalAirport().getCode());
         bookingDto.setArrivalDate(flight.getFlightSchedule().getArrivalDate());
         bookingDto.setArrivalTime(flight.getFlightSchedule().getArrivalTime());
 
@@ -71,9 +81,19 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
             }
             returnFlight.setAvailableSeats(returnFlight.getAvailableSeats() - returnPassengersCount);
             flightRepository.save(returnFlight);
-
+            bookingDto.setAirlineName(flight.getAirline().getAirlineName());
+            bookingDto.setFlightNumber(flight.getFlightNumber());
+            bookingDto.setDepartureAirportName(flight.getDepartureAirport().getName());
+            bookingDto.setDepartureAirportCity(flight.getDepartureAirport().getCity());
+            bookingDto.setDepartureAirportCountry(flight.getDepartureAirport().getCountry());
+            bookingDto.setCodeDepartureAirport(flight.getDepartureAirport().getCode());
             bookingDto.setReturnDepartureDate(returnFlight.getFlightSchedule().getDepartureDate());
             bookingDto.setReturnDepartureTime(returnFlight.getFlightSchedule().getDepartureTime());
+            bookingDto.setArrivalAirportName(flight.getArrivalAirport().getName());
+            bookingDto.setArrivalAirportCity(flight.getArrivalAirport().getCity());
+            bookingDto.setArrivalAirportCountry(flight.getArrivalAirport().getCountry());
+            bookingDto.setCodeArrivalAirport(flight.getArrivalAirport().getCode());
+
             bookingDto.setReturnArrivalDate(returnFlight.getFlightSchedule().getArrivalDate());
             bookingDto.setReturnArrivalTime(returnFlight.getFlightSchedule().getArrivalTime());
 
@@ -96,6 +116,17 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
 
         // Map the schedule information to the BookingDto
         BookingDto savedBookingDto = modelMapper.map(booking, BookingDto.class);
+        savedBookingDto.setAirlineName(flight.getAirline().getAirlineName());
+        savedBookingDto.setFlightNumber(flight.getFlightNumber());
+        savedBookingDto.setDepartureAirportName(flight.getDepartureAirport().getName());
+        savedBookingDto.setDepartureAirportCity(flight.getDepartureAirport().getCity());
+        savedBookingDto.setDepartureAirportCountry(flight.getDepartureAirport().getCountry());
+        savedBookingDto.setCodeDepartureAirport(flight.getDepartureAirport().getCode());
+        savedBookingDto.setArrivalAirportName(flight.getArrivalAirport().getName());
+        savedBookingDto.setArrivalAirportCity(flight.getArrivalAirport().getCity());
+        savedBookingDto.setArrivalAirportCountry(flight.getArrivalAirport().getCountry());
+        savedBookingDto.setCodeArrivalAirport(flight.getArrivalAirport().getCode());
+
         savedBookingDto.setDepartureDate(flight.getFlightSchedule().getDepartureDate());
         savedBookingDto.setDepartureTime(flight.getFlightSchedule().getDepartureTime());
         savedBookingDto.setArrivalDate(flight.getFlightSchedule().getArrivalDate());
@@ -104,6 +135,17 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
             Flight returnFlight = flightRepository.findById(bookingDto.getReturnFlightId())
                     .orElseThrow(() -> new RuntimeException("Return flight not found with ID: " + bookingDto.getReturnFlightId()));
+            savedBookingDto.setAirlineName(returnFlight.getAirline().getAirlineName());
+            savedBookingDto.setReturnFlightNumber(returnFlight.getFlightNumber());
+            savedBookingDto.setReturnDepartureAirportName(returnFlight.getDepartureAirport().getName());
+            savedBookingDto.setReturnDepartureAirportCity(returnFlight.getDepartureAirport().getCity());
+            savedBookingDto.setReturnDepartureAirportCountry(returnFlight.getDepartureAirport().getCountry());
+            savedBookingDto.setReturnCodeDepartureAirport(returnFlight.getDepartureAirport().getCode());
+            savedBookingDto.setReturnArrivalAirportName(returnFlight.getArrivalAirport().getName());
+            savedBookingDto.setReturnArrivalAirportCity(returnFlight.getArrivalAirport().getCity());
+            savedBookingDto.setReturnArrivalAirportCountry(returnFlight.getArrivalAirport().getCountry());
+            savedBookingDto.setReturnCodeArrivalAirport(returnFlight.getArrivalAirport().getCode());
+
             savedBookingDto.setReturnDepartureDate(returnFlight.getFlightSchedule().getDepartureDate());
             savedBookingDto.setReturnDepartureTime(returnFlight.getFlightSchedule().getDepartureTime());
             savedBookingDto.setReturnArrivalDate(returnFlight.getFlightSchedule().getArrivalDate());
@@ -214,7 +256,16 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         existingBooking.setBookingDate(LocalDate.now());
         existingBooking.setTotalPrice(bookingDto.getTotalPrice());
 
-
+        bookingDto.setAirlineName(newFlight.getAirline().getAirlineName());
+        bookingDto.setFlightNumber(newFlight.getFlightNumber());
+        bookingDto.setDepartureAirportName(newFlight.getDepartureAirport().getName());
+        bookingDto.setDepartureAirportCity(newFlight.getDepartureAirport().getCity());
+        bookingDto.setDepartureAirportCountry(newFlight.getDepartureAirport().getCountry());
+        bookingDto.setCodeDepartureAirport(newFlight.getDepartureAirport().getCode());
+        bookingDto.setArrivalAirportName(newFlight.getArrivalAirport().getName());
+        bookingDto.setArrivalAirportCity(newFlight.getArrivalAirport().getCity());
+        bookingDto.setArrivalAirportCountry(newFlight.getArrivalAirport().getCountry());
+        bookingDto.setCodeArrivalAirport(newFlight.getArrivalAirport().getCode());
         bookingDto.setDepartureDate(newFlight.getFlightSchedule().getDepartureDate());
         bookingDto.setDepartureTime(newFlight.getFlightSchedule().getDepartureTime());
         bookingDto.setArrivalDate(newFlight.getFlightSchedule().getArrivalDate());
@@ -230,6 +281,17 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
 
             returnFlight.setAvailableSeats(returnFlight.getAvailableSeats() - newPassengerCount);
             flightRepository.save(returnFlight);
+            bookingDto.setAirlineName(returnFlight.getAirline().getAirlineName());
+            bookingDto.setReturnFlightNumber(returnFlight.getFlightNumber());
+            bookingDto.setReturnDepartureAirportName(returnFlight.getDepartureAirport().getName());
+            bookingDto.setReturnDepartureAirportCity(returnFlight.getDepartureAirport().getCity());
+            bookingDto.setReturnDepartureAirportCountry(returnFlight.getDepartureAirport().getCountry());
+            bookingDto.setReturnCodeDepartureAirport(returnFlight.getDepartureAirport().getCode());
+            bookingDto.setReturnArrivalAirportName(returnFlight.getArrivalAirport().getName());
+            bookingDto.setReturnArrivalAirportCity(returnFlight.getArrivalAirport().getCity());
+            bookingDto.setReturnArrivalAirportCountry(returnFlight.getArrivalAirport().getCountry());
+            bookingDto.setReturnCodeArrivalAirport(returnFlight.getArrivalAirport().getCode());
+
             bookingDto.setReturnDepartureDate(returnFlight.getFlightSchedule().getDepartureDate());
             bookingDto.setReturnDepartureTime(returnFlight.getFlightSchedule().getDepartureTime());
             bookingDto.setReturnArrivalDate(returnFlight.getFlightSchedule().getArrivalDate());
@@ -248,11 +310,59 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
         return modelMapper.map(updatedBooking, BookingDto.class);
     }
 
+//    @Override
+//    @Transactional
+//    public Page<BookingDto> getBookingsByPassengerEmail(String email, Pageable pageable) {
+//        Page<Booking> bookings = bookingRepository.findBookingsByPassengerEmail(email, pageable);
+//        return bookings.map(booking -> modelMapper.map(booking, BookingDto.class));
+//    }
     @Override
     @Transactional
     public Page<BookingDto> getBookingsByPassengerEmail(String email, Pageable pageable) {
         Page<Booking> bookings = bookingRepository.findBookingsByPassengerEmail(email, pageable);
-        return bookings.map(booking -> modelMapper.map(booking, BookingDto.class));
+
+        return bookings.map(booking -> {
+            BookingDto bookingDto = modelMapper.map(booking, BookingDto.class);
+            if (booking.getFlight() != null) {
+                Flight flight = booking.getFlight();
+                bookingDto.setAirlineName(flight.getAirline().getAirlineName());
+                bookingDto.setFlightNumber(flight.getFlightNumber());
+                bookingDto.setDepartureAirportName(flight.getDepartureAirport().getName());
+                bookingDto.setDepartureAirportCity(flight.getDepartureAirport().getCity());
+                bookingDto.setDepartureAirportCountry(flight.getDepartureAirport().getCountry());
+                bookingDto.setCodeDepartureAirport(flight.getDepartureAirport().getCode());
+                bookingDto.setArrivalAirportName(flight.getArrivalAirport().getName());
+                bookingDto.setArrivalAirportCity(flight.getArrivalAirport().getCity());
+                bookingDto.setArrivalAirportCountry(flight.getArrivalAirport().getCountry());
+                bookingDto.setCodeArrivalAirport(flight.getArrivalAirport().getCode());
+                bookingDto.setDepartureDate(flight.getFlightSchedule().getDepartureDate());
+                bookingDto.setDepartureTime(flight.getFlightSchedule().getDepartureTime());
+                bookingDto.setArrivalDate(flight.getFlightSchedule().getArrivalDate());
+                bookingDto.setArrivalTime(flight.getFlightSchedule().getArrivalTime());
+            }
+
+            if ("ROUND_TRIP".equalsIgnoreCase(bookingDto.getTripType())) {
+                Flight returnFlight = flightRepository.findById(bookingDto.getReturnFlightId())
+                        .orElseThrow(() -> new RuntimeException("Return flight not found with ID: " + bookingDto.getReturnFlightId()));
+
+                bookingDto.setReturnAirlineName(returnFlight.getAirline().getAirlineName());
+                bookingDto.setReturnFlightNumber(returnFlight.getFlightNumber());
+                bookingDto.setReturnDepartureAirportName(returnFlight.getDepartureAirport().getName());
+                bookingDto.setReturnDepartureAirportCity(returnFlight.getDepartureAirport().getCity());
+                bookingDto.setReturnDepartureAirportCountry(returnFlight.getDepartureAirport().getCountry());
+                bookingDto.setReturnCodeDepartureAirport(returnFlight.getDepartureAirport().getCode());
+                bookingDto.setReturnArrivalAirportName(returnFlight.getArrivalAirport().getName());
+                bookingDto.setReturnArrivalAirportCity(returnFlight.getArrivalAirport().getCity());
+                bookingDto.setReturnArrivalAirportCountry(returnFlight.getArrivalAirport().getCountry());
+                bookingDto.setReturnCodeArrivalAirport(returnFlight.getArrivalAirport().getCode());
+                bookingDto.setReturnDepartureDate(returnFlight.getFlightSchedule().getDepartureDate());
+                bookingDto.setReturnDepartureTime(returnFlight.getFlightSchedule().getDepartureTime());
+                bookingDto.setReturnArrivalDate(returnFlight.getFlightSchedule().getArrivalDate());
+                bookingDto.setReturnArrivalTime(returnFlight.getFlightSchedule().getArrivalTime());
+            }
+
+            return bookingDto;
+        });
     }
 
 
