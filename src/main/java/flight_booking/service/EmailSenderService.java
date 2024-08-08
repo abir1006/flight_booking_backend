@@ -7,10 +7,12 @@ import flight_booking.domain.Role;
 import flight_booking.domain.User;
 import flight_booking.dto.BookingDto;
 import flight_booking.dto.PassengerDto;
+import flight_booking.repositories.BookingRepository;
 import flight_booking.repositories.PassengerRepository;
 import flight_booking.repositories.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamSource;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @EnableAsync
 @Service
@@ -37,12 +40,21 @@ public class EmailSenderService {
     @Autowired
     private UserRepository repository;
 
-    public void sendEmailWithPdf(String to, String subject, BookingDto booking) throws Exception {
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+
+    public void sendEmailWithPdf(String to, long bookingId) throws Exception {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         // Get main passenger to send mail
-        List<String> emails = booking.getPassengers().stream().map(PassengerDto::getEmail).toList();
+        Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
+        Booking booking = optionalBooking.orElse(null);
+
+        assert booking != null;
+        List<String> emails = booking.getPassengers().stream().map(Passenger::getEmail).toList();
         User passenger = getMainPassenger(emails);
 
         assert passenger != null;
@@ -56,14 +68,15 @@ public class EmailSenderService {
 
                         Best regards,
                         Flight Booking Service""",
-                passenger.getFirstname(), booking.getFlightId());
+                passenger.getFirstname(), booking.getFlight().getId());
 
         helper.setFrom("no-reply@flightbooking.com");
         helper.setTo(to);
-        helper.setSubject(subject);
+        helper.setSubject("Booking Reserved!");
         helper.setText(body);
 
         // Generate PDF in memory
+//        BookingDto bookingDto=modelMapper.map(booking, BookingDto.class);
         byte[] pdfBytes = pdfGenerationService.generateTicketPdf(booking);
 
         // Attach PDF
@@ -73,11 +86,15 @@ public class EmailSenderService {
         mailSender.send(message);
     }
 
-    public void sendEmailWithoutPdf(String to, String subject, BookingDto booking) throws Exception {
+    public void sendEmailWithoutPdf(String to,  long bookingId) throws Exception {
         SimpleMailMessage message = new SimpleMailMessage();
 
         // Get main passenger to send mail
-        List<String> emails = booking.getPassengers().stream().map(PassengerDto::getEmail).toList();
+        Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
+        Booking booking = optionalBooking.orElse(null);
+
+        assert booking != null;
+        List<String> emails = booking.getPassengers().stream().map(Passenger::getEmail).toList();
         User passenger = getMainPassenger(emails);
 
         assert passenger != null;
@@ -91,10 +108,10 @@ public class EmailSenderService {
 
                         Best regards,
                         Flight Booking Service""",
-                passenger.getFirstname(), booking.getFlightId());
+                passenger.getFirstname(), booking.getFlight().getId());
 
         message.setTo(to);
-        message.setSubject(subject);
+        message.setSubject("Booking Confirmed");
         message.setText(body);
 
         mailSender.send(message);

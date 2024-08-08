@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Service
 public class PdfGenerationService {
 
-    public byte[] generateTicketPdf(BookingDto booking) throws Exception {
+    public byte[] generateTicketPdf(Booking booking) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Document document = new Document();
         PdfWriter.getInstance(document, outputStream);
@@ -37,9 +37,9 @@ public class PdfGenerationService {
         document.add(new Paragraph("\nFlight Booking Ticket", infoFont));
         document.add(new Paragraph("Booking ID: " + booking.getId(), infoFont));
       document.add(new Paragraph("Booking Date: " + LocalDate.now() ,infoFont));
-        document.add(new Paragraph("Departure Date: " + booking.getDepartureDate() ,infoFont));
+        document.add(new Paragraph("Departure Date: " + booking.getFlight().getFlightSchedule().getDepartureDate() ,infoFont));
         if(booking.getTripType().equals("ROUND_TRIP")){
-            document.add(new Paragraph("Return Date: " + booking.getReturnDepartureDate() ,infoFont));
+            document.add(new Paragraph("Return Date: " + booking.getReturnDate() ,infoFont));
         }
         document.add(new Paragraph("Trip Type: " + booking.getTripType(), infoFont));
         document.add(new Paragraph("Amount Paid: " + booking.getTotalPrice(), infoFont));
@@ -77,7 +77,7 @@ public class PdfGenerationService {
 
         // Add table rows with passenger details
         Font rowFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
-        for (PassengerDto passenger : booking.getPassengers()) {
+        for (Passenger passenger : booking.getPassengers()) {
             PdfPCell cell;
 
             cell = new PdfPCell(new Phrase(passenger.getFirstName(), rowFont));

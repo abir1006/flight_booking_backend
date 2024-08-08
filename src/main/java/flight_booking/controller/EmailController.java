@@ -20,20 +20,18 @@ public class EmailController {
 
     @PostMapping("/reserved")
     public String sendEmailReserved(@RequestParam  String to,
-                            @RequestParam String subject,
-                            @RequestBody BookingDto booking) throws Exception {
+                            @RequestParam long bookingId) throws Exception {
 
-        emailSenderService.sendEmailWithoutPdf(to,subject,booking);
+        emailSenderService.sendEmailWithoutPdf(to,bookingId);
         return "Email sent successfully";
 
     }
 
     @PostMapping("/confirmed")
     public String sendConfirmationEmail(@RequestParam  String to,
-                            @RequestParam String subject,
-                            @RequestBody BookingDto booking) throws Exception {
+                            @RequestParam long bookingId) throws Exception {
 
-        emailSenderService.sendEmailWithPdf(to,subject,booking);
+        emailSenderService.sendEmailWithPdf(to,bookingId);
         return "Email sent successfully";
 
     }
