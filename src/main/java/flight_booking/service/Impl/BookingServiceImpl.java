@@ -9,7 +9,6 @@ import flight_booking.repositories.FlightRepository;
 import flight_booking.service.BookingService;
 //import flight_booking.service.NotificationService;
 import flight_booking.service.PaymentService;
-import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static flight_booking.Util.PdfGenerator.generateTicketPdf;
 
 @Service
 public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, BookingDto> implements BookingService {

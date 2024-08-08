@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PassengerRepository extends GenericRepository<Passenger, Long> {
+    Passenger findByEmail(String email);
 }
