@@ -24,6 +24,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class EmailSenderService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public void sendEmailWithPdf(String to, long bookingId) throws Exception {
+    public void sendEmailWithPdf(long bookingId) throws Exception {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
@@ -61,23 +62,36 @@ public class EmailSenderService {
         String body = String.format("""
                         Hi %s,
 
-                        We are pleased to inform you that your booking for flight #%s has been confirmed. \
+                        We are pleased to inform you that your booking for flight #%s  has been confirmed. \
                         Please find your e-ticket attached to this email.
 
                         Thank you for choosing our service. We wish you a pleasant journey!
+                        
+                        *******Booking Information*****
+                        ReservedDate:%s
+                        AirlinesName:%s
+                        DepartureDate:%s
+                        Departure: %s
+                        Arrival: %s
 
                         Best regards,
                         Flight Booking Service""",
-                passenger.getFirstname(), booking.getFlight().getId());
+                passenger.getFirstname() + " " + passenger.getLastname(),
+                booking.getFlight().getId(),
+                booking.getBookingDate(),
+                booking.getFlight().getAirline().getAirlineName(),
+                booking.getFlight().getFlightSchedule().getDepartureDate(),
+                booking.getFlight().getDepartureAirport().getCity(),
+                booking.getFlight().getArrivalAirport().getCity());
 
         helper.setFrom("no-reply@flightbooking.com");
-        helper.setTo(to);
+        helper.setTo(passenger.getEmail());
         helper.setSubject("Booking Reserved!");
         helper.setText(body);
 
         // Generate PDF in memory
 //        BookingDto bookingDto=modelMapper.map(booking, BookingDto.class);
-        byte[] pdfBytes = pdfGenerationService.generateTicketPdf(booking);
+        byte[] pdfBytes = pdfGenerationService.generateTicketPdf(bookingId);
 
         // Attach PDF
         InputStreamSource pdfSource = new ByteArrayResource(pdfBytes);
@@ -86,7 +100,7 @@ public class EmailSenderService {
         mailSender.send(message);
     }
 
-    public void sendEmailWithoutPdf(String to,  long bookingId) throws Exception {
+    public void sendEmailWithoutPdf(long bookingId) throws Exception {
         SimpleMailMessage message = new SimpleMailMessage();
 
         // Get main passenger to send mail
@@ -102,15 +116,28 @@ public class EmailSenderService {
                         Hi %s,
 
                         Your booking for flight #%s has been reserved. \
-                        Please go to the payment section to confirm your booking.
+                        Please make the payment to confirm your booking.
 
                         Thank you for choosing our service. We look forward to serving you!
+                        
+                        *******Booking Information*****
+                        ReservedDate:%s
+                        AirlinesName:%s
+                        DepartureDate:%s
+                        Departure: %s
+                        Arrival: %s
 
                         Best regards,
                         Flight Booking Service""",
-                passenger.getFirstname(), booking.getFlight().getId());
+                passenger.getFirstname() +" "+ passenger.getLastname(),
+                booking.getFlight().getId(),
+                booking.getBookingDate(),
+                booking.getFlight().getAirline().getAirlineName(),
+                booking.getFlight().getFlightSchedule().getDepartureDate(),
+                booking.getFlight().getDepartureAirport().getCity(),
+                booking.getFlight().getArrivalAirport().getCity());
 
-        message.setTo(to);
+        message.setTo(passenger.getEmail());
         message.setSubject("Booking Confirmed");
         message.setText(body);
 

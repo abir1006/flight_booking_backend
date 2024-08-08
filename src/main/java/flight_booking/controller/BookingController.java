@@ -60,4 +60,7 @@ public class BookingController extends GenericController<Long, BookingDto> {
         Page<BookingDto> bookings = bookingService.getBookingsByPassengerEmail(email, pageable);
         return ResponseEntity.ok(bookings);
     }
+
+
+
 }
