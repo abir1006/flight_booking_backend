@@ -1,30 +1,22 @@
 package flight_booking.service;
 
-import com.itextpdf.text.DocumentException;
+
 import flight_booking.domain.Booking;
 import flight_booking.domain.Passenger;
-import flight_booking.domain.Role;
 import flight_booking.domain.User;
-import flight_booking.dto.BookingDto;
-import flight_booking.dto.PassengerDto;
 import flight_booking.repositories.BookingRepository;
-import flight_booking.repositories.PassengerRepository;
 import flight_booking.repositories.UserRepository;
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +37,9 @@ public class EmailSenderService {
     private BookingRepository bookingRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Value("${sendingEmail}")
+    private  String sendingEmail;
 
     public void sendEmailWithPdf(long bookingId) throws Exception {
         MimeMessage message = mailSender.createMimeMessage();
@@ -84,7 +79,7 @@ public class EmailSenderService {
                 booking.getFlight().getDepartureAirport().getCity(),
                 booking.getFlight().getArrivalAirport().getCity());
 
-        helper.setFrom("no-reply@flightbooking.com");
+        helper.setFrom(sendingEmail);
         helper.setTo(passenger.getEmail());
         helper.setSubject("Booking Reserved!");
         helper.setText(body);
@@ -137,6 +132,7 @@ public class EmailSenderService {
                 booking.getFlight().getDepartureAirport().getCity(),
                 booking.getFlight().getArrivalAirport().getCity());
 
+        message.setFrom(sendingEmail);
         message.setTo(passenger.getEmail());
         message.setSubject("Booking Confirmed");
         message.setText(body);

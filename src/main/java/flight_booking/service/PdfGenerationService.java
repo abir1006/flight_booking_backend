@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -46,7 +45,8 @@ public class PdfGenerationService {
         document.add(new Paragraph("\nFlight Booking Ticket", infoFont));
         document.add(new Paragraph("Booking ID: " + booking.getId(), infoFont));
         document.add(new Paragraph("Trip Type: " + booking.getTripType(), infoFont));
-        document.add(new Paragraph("Booking Date: " + LocalDate.now() ,infoFont));
+        document.add(new Paragraph("Booking Date: " + booking.getBookingDate() ,infoFont));
+        document.add(new Paragraph("Booking Date: " + booking.getFlight().getAirline().getAirlineName() ,infoFont));
         document.add(new Paragraph("Departure Date: " + booking.getFlight().getFlightSchedule().getDepartureDate() ,infoFont));
         document.add(new Paragraph("Departure Airport: " + booking.getFlight().getDepartureAirport().getName()+", "+ booking.getFlight().getDepartureAirport().getCity() ,infoFont));
         document.add(new Paragraph("Arrival Airport: " + booking.getFlight().getArrivalAirport().getName()+", "+ booking.getFlight().getArrivalAirport().getCity() ,infoFont));
