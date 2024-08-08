@@ -17,4 +17,5 @@ public interface UserRepository extends GenericRepository<User,Long> {
     Optional<User> findByEmail(String email);
     List<User> findAllByRole(Role role);
     Page<User> findAllByRole(Role role, Pageable pageable);
+    User findByEmailAndRole(String email, Role role);
 }

@@ -21,7 +21,7 @@ public class EmailController {
     @PostMapping("/reserved")
     public String sendEmailReserved(@RequestParam  String to,
                             @RequestParam String subject,
-                            @RequestBody Booking booking) throws Exception {
+                            @RequestBody BookingDto booking) throws Exception {
 
         emailSenderService.sendEmailWithoutPdf(to,subject,booking);
         return "Email sent successfully";
@@ -31,7 +31,7 @@ public class EmailController {
     @PostMapping("/confirmed")
     public String sendConfirmationEmail(@RequestParam  String to,
                             @RequestParam String subject,
-                            @RequestBody Booking booking) throws Exception {
+                            @RequestBody BookingDto booking) throws Exception {
 
         emailSenderService.sendEmailWithPdf(to,subject,booking);
         return "Email sent successfully";

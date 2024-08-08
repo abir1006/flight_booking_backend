@@ -45,6 +45,11 @@ public class UserController extends GenericController<Long, UserDto> {
 
     }
 
+    @GetMapping("/user-email")
+    public UserDto findUserByEmail(@RequestParam String email){
+        return userService.getUserByEmail(email);
+    }
+
 
 
 
