@@ -46,7 +46,7 @@ public class PdfGenerationService {
         document.add(new Paragraph("Booking ID: " + booking.getId(), infoFont));
         document.add(new Paragraph("Trip Type: " + booking.getTripType(), infoFont));
         document.add(new Paragraph("Booking Date: " + booking.getBookingDate() ,infoFont));
-        document.add(new Paragraph("Booking Date: " + booking.getFlight().getAirline().getAirlineName() ,infoFont));
+        document.add(new Paragraph("Airline: " + booking.getFlight().getAirline().getAirlineName() ,infoFont));
         document.add(new Paragraph("Departure Date: " + booking.getFlight().getFlightSchedule().getDepartureDate() ,infoFont));
         document.add(new Paragraph("Departure Airport: " + booking.getFlight().getDepartureAirport().getName()+", "+ booking.getFlight().getDepartureAirport().getCity() ,infoFont));
         document.add(new Paragraph("Arrival Airport: " + booking.getFlight().getArrivalAirport().getName()+", "+ booking.getFlight().getArrivalAirport().getCity() ,infoFont));
