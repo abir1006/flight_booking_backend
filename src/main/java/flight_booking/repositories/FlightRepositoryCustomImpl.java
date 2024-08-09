@@ -20,50 +20,54 @@ public class FlightRepositoryCustomImpl implements FlightRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Flight> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate flightDate, LocalDate returnDate, Integer travellers) {
+    public List<List<Flight>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Flight> query = cb.createQuery(Flight.class);
-        Root<Flight> flight = query.from(Flight.class);
+        List<List<Flight>> flightsList = new ArrayList<>();
 
-        List<Predicate> predicates = new ArrayList<>();
-
-        if (departureAirportId != null) {
-            predicates.add(cb.equal(flight.get("departureAirport").get("id"), departureAirportId));
-        }
-        if (arrivalAirportId != null) {
-            predicates.add(cb.equal(flight.get("arrivalAirport").get("id"), arrivalAirportId));
-        }
-        if (flightDate != null) {
-            predicates.add(cb.equal(flight.get("flightSchedule").get("departureDate"), flightDate));
-        }
-        if (travellers != null) {
-            predicates.add(cb.greaterThanOrEqualTo(flight.get("availableSeats"), travellers));
-        }
-
-        query.where(predicates.toArray(new Predicate[0]));
-        List<Flight> outboundFlights = entityManager.createQuery(query).getResultList();
-
-        if (returnDate != null) {
-            CriteriaQuery<Flight> returnQuery = cb.createQuery(Flight.class);
-            Root<Flight> returnFlight = returnQuery.from(Flight.class);
-            List<Predicate> returnPredicates = new ArrayList<>();
+        // Flights on startDate
+        if (startDate != null) {
+            CriteriaQuery<Flight> startDateQuery = cb.createQuery(Flight.class);
+            Root<Flight> startDateFlight = startDateQuery.from(Flight.class);
+            List<Predicate> startDatePredicates = new ArrayList<>();
 
             if (departureAirportId != null) {
-                returnPredicates.add(cb.equal(returnFlight.get("arrivalAirport").get("id"), departureAirportId));
+                startDatePredicates.add(cb.equal(startDateFlight.get("departureAirport").get("id"), departureAirportId));
             }
             if (arrivalAirportId != null) {
-                returnPredicates.add(cb.equal(returnFlight.get("departureAirport").get("id"), arrivalAirportId));
+                startDatePredicates.add(cb.equal(startDateFlight.get("arrivalAirport").get("id"), arrivalAirportId));
             }
-            returnPredicates.add(cb.equal(returnFlight.get("flightSchedule").get("departureDate"), returnDate));
+            startDatePredicates.add(cb.equal(startDateFlight.get("flightSchedule").get("departureDate"), startDate));
             if (travellers != null) {
-                returnPredicates.add(cb.greaterThanOrEqualTo(returnFlight.get("availableSeats"), travellers));
+                startDatePredicates.add(cb.greaterThanOrEqualTo(startDateFlight.get("availableSeats"), travellers));
             }
 
-            returnQuery.where(returnPredicates.toArray(new Predicate[0]));
-            List<Flight> returnFlights = entityManager.createQuery(returnQuery).getResultList();
-            outboundFlights.addAll(returnFlights);
+            startDateQuery.where(startDatePredicates.toArray(new Predicate[0]));
+            List<Flight> startDateFlights = entityManager.createQuery(startDateQuery).getResultList();
+            flightsList.add(startDateFlights);
         }
 
-        return outboundFlights;
+        // Flights on endDate
+        if (endDate != null) {
+            CriteriaQuery<Flight> endDateQuery = cb.createQuery(Flight.class);
+            Root<Flight> endDateFlight = endDateQuery.from(Flight.class);
+            List<Predicate> endDatePredicates = new ArrayList<>();
+
+            if (departureAirportId != null) {
+                endDatePredicates.add(cb.equal(endDateFlight.get("arrivalAirport").get("id"), departureAirportId));
+            }
+            if (arrivalAirportId != null) {
+                endDatePredicates.add(cb.equal(endDateFlight.get("departureAirport").get("id"), arrivalAirportId));
+            }
+            endDatePredicates.add(cb.equal(endDateFlight.get("flightSchedule").get("departureDate"), endDate));
+            if (travellers != null) {
+                endDatePredicates.add(cb.greaterThanOrEqualTo(endDateFlight.get("availableSeats"), travellers));
+            }
+
+            endDateQuery.where(endDatePredicates.toArray(new Predicate[0]));
+            List<Flight> endDateFlights = entityManager.createQuery(endDateQuery).getResultList();
+            flightsList.add(endDateFlights);
+        }
+
+        return flightsList;
     }
 }

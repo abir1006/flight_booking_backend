@@ -34,26 +34,26 @@ VALUES ('Hartsfield-Jackson Atlanta International Airport', 'Atlanta', 'United S
 -- Insert users
 -- password for all user is "123"
 INSERT INTO users (firstname, lastname, email, password, phone, address, role)
-VALUES ('John', 'Doe', 'john.doe@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
+VALUES ('Abdoon', 'Nur', 'abdoon.nur@miu.edu', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
         '1234567890', '123 Main St', 'USER'),
-       ('Jane', 'Smith', 'jane.smith@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
+       ('Jane', 'Smith', 'admin@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
         '0987654321', '456 Elm St', 'ADMIN'),
-       ('Alice', 'Johnson', 'alice.johnson@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
+       ('Alice', 'Johnson', 'user1@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
         '1112223333', '789 Pine St', 'USER'),
-       ('Bob', 'Williams', 'bob.williams@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
+       ('Bob', 'Williams', 'user2@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
         '2223334444', '101 Maple St', 'USER'),
-       ('Carol', 'Brown', 'carol.brown@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
-        '3334445555', '202 Oak St', 'ADMIN'),
-       ('David', 'Jones', 'david.jones@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
+       ('Carol', 'Brown', 'user3@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
+        '3334445555', '202 Oak St', 'USER'),
+       ('David', 'Jones', 'user4@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
         '4445556666', '303 Cedar St', 'USER'),
-       ('Eva', 'Garcia', 'eva.garcia@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
+       ('Eva', 'Garcia', 'user5@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
         '5556667777', '404 Birch St', 'USER'),
-       ('Frank', 'Martinez', 'frank.martinez@example.com',
-        '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W', '6667778888', '505 Walnut St', 'ADMIN'),
-       ('Grace', 'Hernandez', 'grace.hernandez@example.com',
+       ('Frank', 'Martinez', 'user6@example.com',
+        '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W', '6667778888', '505 Walnut St', 'USER'),
+       ('Grace', 'Hernandez', 'user7@example.com',
         '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W', '7778889999', '606 Cherry St', 'USER'),
-       ('Henry', 'Lopez', 'henry.lopez@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
-        '8889990000', '707 Ash St', 'ADMIN');
+       ('Henry', 'Lopez', 'user8@example.com', '$2a$10$zn7lm9rpKFkRtS23ngkXLOrxQ7ORA5gFj8UIoVa3AjtkgpUvTE22W',
+        '8889990000', '707 Ash St', 'USER');
 
 
 INSERT INTO airline (id, airline_logo, airline_name, country)

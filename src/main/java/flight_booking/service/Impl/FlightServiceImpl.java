@@ -64,36 +64,17 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
     }
 
     @Override
-    public List<FlightDto> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
-        List<Flight> flights = flightRepository.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
-        List<FlightDto> flightDtos = flights.stream()
-                .map(flight -> {
-                    FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
-                    flightDto.setAirlineName(flight.getAirline().getAirlineName());
-                    flightDto.setAirlineLogo(flight.getAirline().getAirlineLogo());
-                    return flightDto;
-                })
-                .collect(Collectors.toList());
-
-        // Pair the flights if startDate and endDate are provided
-        if (startDate != null && endDate != null) {
-            List<FlightDto> pairedFlights = new ArrayList<>();
-            for (FlightDto flight : flightDtos) {
-                if (flight.getFlightSchedule().getDepartureDate().equals(startDate)) {
-                    for (FlightDto returnFlight : flightDtos) {
-                        if (returnFlight.getFlightSchedule().getDepartureDate().equals(endDate) &&
-                                returnFlight.getDepartureAirport().getId() == (flight.getArrivalAirport().getId()) &&
-                                returnFlight.getArrivalAirport().getId() == (flight.getDepartureAirport().getId())) {
-                            pairedFlights.add(flight);
-                            pairedFlights.add(returnFlight);
-                        }
-                    }
-                }
-            }
-            return pairedFlights;
-        }
-
-        return flightDtos;
+    public List<List<FlightDto>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
+        List<List<Flight>> flights = flightRepository.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
+        return flights.stream()
+                .map(flightList -> flightList.stream()
+                        .map(flight -> {
+                            FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
+                            flightDto.setAirlineName(flight.getAirline().getAirlineName());
+                            flightDto.setAirlineLogo(flight.getAirline().getAirlineLogo());
+                            return flightDto;
+                        }).collect(Collectors.toList())
+                ).collect(Collectors.toList());
     }
 
     //There should be Airplane Entity model
