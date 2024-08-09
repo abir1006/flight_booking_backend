@@ -81,7 +81,7 @@ public class EmailSenderService {
 
         helper.setFrom(sendingEmail);
         helper.setTo(passenger.getEmail());
-        helper.setSubject("Booking Reserved!");
+        helper.setSubject("Booking Confirmed!");
         helper.setText(body);
 
         // Generate PDF in memory
@@ -134,7 +134,7 @@ public class EmailSenderService {
 
         message.setFrom(sendingEmail);
         message.setTo(passenger.getEmail());
-        message.setSubject("Booking Confirmed");
+        message.setSubject("Booking Reserved!");
         message.setText(body);
 
         mailSender.send(message);
