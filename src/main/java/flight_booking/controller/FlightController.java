@@ -74,14 +74,14 @@ public class FlightController extends GenericController<Long,FlightDto> {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<FlightDto>> searchFlights(
+    public ResponseEntity<List<List<FlightDto>>> searchFlights(
             @RequestParam(required = false) Long departureAirportId,
             @RequestParam(required = false) Long arrivalAirportId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(required = false) Integer travellers) {
 
-        List<FlightDto> flights = flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
+        List<List<FlightDto>> flights = flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
         return ResponseEntity.ok(flights);
     }
 
