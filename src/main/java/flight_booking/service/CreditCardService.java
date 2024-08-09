@@ -18,7 +18,6 @@ public class CreditCardService {
 
     @PostConstruct
     public void init() {
-        System.out.println(secretKey);
         Stripe.apiKey = secretKey;
     }
 

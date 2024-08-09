@@ -4,6 +4,7 @@ import flight_booking.domain.Booking;
 import flight_booking.domain.Flight;
 import flight_booking.domain.Passenger;
 import flight_booking.dto.BookingDto;
+import flight_booking.events.FlightBookingEvent;
 import flight_booking.repositories.BookingRepository;
 import flight_booking.repositories.FlightRepository;
 import flight_booking.service.BookingService;
@@ -12,6 +13,7 @@ import flight_booking.service.PaymentService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,9 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
     private final PaymentService paymentService;
     @Autowired
     private final FlightRepository flightRepository;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     //private NotificationService notificationService;
 
@@ -221,6 +226,7 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
 
         booking = bookingRepository.save(booking);
         BookingDto bookingDto = modelMapper.map(booking, BookingDto.class);
+        eventPublisher.publishEvent(new FlightBookingEvent(this, booking));
         bookingDto.setTicket(ticket);
 
         return bookingDto;
