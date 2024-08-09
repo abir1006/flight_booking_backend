@@ -1,21 +1,35 @@
 package flight_booking.service;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.*;
 import flight_booking.domain.Booking;
 import flight_booking.domain.Passenger;
 
 import flight_booking.repositories.BookingRepository;
+import flight_booking.repositories.FlightRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Optional;
 
 @Service
 public class PdfGenerationService {
+    private static final Logger log = LoggerFactory.getLogger(PdfGenerationService.class);
     @Autowired
     BookingRepository bookingRepository;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
 
     public byte[] generateTicketPdf(long bookingId) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -27,21 +41,31 @@ public class PdfGenerationService {
         Booking booking = optionalBooking.orElse(null);
         assert booking!=null;
 
+        document.open();
         // Set document properties
         document.addAuthor("Flight Booking Service");
         document.addCreationDate();
         document.addTitle("E-Ticket");
 
-        document.open();
+        // Add image (logo) from URL
+        String logoUrl = booking.getFlight().getAirline().getAirlineLogo();
+        Image image =  getImageFromUrl(logoUrl);
+        if (image != null) {
+            image.scaleToFit(200, 200); // Resize the logo
+            image.setAlignment(Image.ALIGN_RIGHT);
+            image.setBorder(1);
+            document.add(image);
+        }
+
 
         // Add title
-        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20, BaseColor.BLUE);
+        Font titleFont = FontFactory.getFont(FontFactory.TIMES_BOLD, 20, BaseColor.BLUE);
         Paragraph title = new Paragraph("E-Ticket", titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
 
         // Add booking information
-        Font infoFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+        Font infoFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
         document.add(new Paragraph("\nFlight Booking Ticket", infoFont));
         document.add(new Paragraph("Booking ID: " + booking.getId(), infoFont));
         document.add(new Paragraph("Trip Type: " + booking.getTripType(), infoFont));
@@ -112,5 +136,21 @@ public class PdfGenerationService {
         document.close();
 
         return outputStream.toByteArray();
+    }
+
+    private Image getImageFromUrl(String logoUrl) {
+        try {
+            URL url = new URL(logoUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+            if (connection.getResponseCode() == 200) {
+                InputStream inputStream = connection.getInputStream();
+                return Image.getInstance(inputStream.readAllBytes());
+            }
+        } catch (Exception e) {
+            log.error("Failed to fetch image from URL: " + logoUrl, e);
+        }
+        return null;
     }
 }
