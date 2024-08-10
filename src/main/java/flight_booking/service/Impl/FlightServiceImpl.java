@@ -4,6 +4,8 @@ package flight_booking.service.Impl;
 import flight_booking.domain.Flight;
 import flight_booking.dto.FlightDto;
 import flight_booking.repositories.FlightRepository;
+import flight_booking.repositories.FlightRepositoryCustom;
+import flight_booking.repositories.customImpl.FlightRepositoryCustomImpl;
 import flight_booking.service.FlightService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,12 +24,14 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
 
     private final FlightRepository flightRepository;
     private final ModelMapper modelMapper;
+    private final FlightRepositoryCustomImpl flightRepositoryCustomImpl;
 
     @Autowired
-    public FlightServiceImpl(FlightRepository flightRepository, ModelMapper modelMapper) {
+    public FlightServiceImpl(FlightRepository flightRepository, ModelMapper modelMapper, FlightRepositoryCustomImpl flightRepositoryCustomImpl) {
         super(flightRepository,modelMapper, Flight.class, FlightDto.class);
         this.flightRepository = flightRepository;
         this.modelMapper = modelMapper;
+        this.flightRepositoryCustomImpl = flightRepositoryCustomImpl;
     }
 
 
@@ -65,17 +70,32 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
 
     @Override
     public List<List<FlightDto>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
-        List<List<Flight>> flights = flightRepository.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
-        return flights.stream()
-                .map(flightList -> flightList.stream()
-                        .map(flight -> {
-                            FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
-                            flightDto.setAirlineName(flight.getAirline().getAirlineName());
-                            flightDto.setAirlineLogo(flight.getAirline().getAirlineLogo());
-                            return flightDto;
-                        }).collect(Collectors.toList())
-                ).collect(Collectors.toList());
+        List<FlightDto> outboundFlights = flightRepositoryCustomImpl.searchFlights(departureAirportId, arrivalAirportId, startDate, travellers, true)
+                .stream()
+                .map(flight -> {
+                    FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
+                    flightDto.setAirlineName(flight.getAirline().getAirlineName());
+                    flightDto.setAirlineLogo(flight.getAirline().getAirlineLogo());
+                    return flightDto;
+                })
+                .collect(Collectors.toList());
+
+        List<FlightDto> returnFlights = flightRepositoryCustomImpl.searchFlights(departureAirportId, arrivalAirportId, endDate, travellers, false)
+                .stream()
+                .map(flight -> {
+                    FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
+                    flightDto.setAirlineName(flight.getAirline().getAirlineName());
+                    flightDto.setAirlineLogo(flight.getAirline().getAirlineLogo());
+                    return flightDto;
+                })
+                .collect(Collectors.toList());
+
+        List<List<FlightDto>> result = new ArrayList<>();
+        result.add(outboundFlights);
+        result.add(returnFlights);
+        return result;
     }
+
 
     //There should be Airplane Entity model
 //    @Override

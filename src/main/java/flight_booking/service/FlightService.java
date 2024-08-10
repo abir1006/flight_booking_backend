@@ -5,6 +5,7 @@ import flight_booking.dto.FlightDto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface FlightService extends GenericService<Long, FlightDto> {
 
@@ -26,6 +27,7 @@ public interface FlightService extends GenericService<Long, FlightDto> {
     List<FlightDto> searchByAvailableSeats(int availableSeats);
 
     List<List<FlightDto>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers);
+
 //   //There should be Airplane Entity model
 //    List<FlightDto> searchByAvailablePlanes(String planeModel);
 
