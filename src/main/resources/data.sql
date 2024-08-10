@@ -215,50 +215,97 @@ VALUES
 
 
 
--- Insert sample booking data
--- INSERT INTO booking (booking_date, status, trip_type, total_price, flight_id, return_flight_id, return_date)
--- VALUES
---     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 1, NULL, NULL),
---     ('2024-08-02', 'PENDING', 'ROUND_TRIP', 450.00, 2, 1, '2024-09-02');
---     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 2, NULL, NULL),
---     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 1, NULL, NULL),
---     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 2, NULL, NULL),
---     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 1, NULL, NULL),
---     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 2, NULL, NULL),
---     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 1, NULL, NULL),
---     ('2024-08-01', 'PENDING', 'ONE_WAY', 200.00, 2, NULL, NULL);
---
---
---
--- -- Insert sample passenger data
--- INSERT INTO passenger (first_name, last_name, email, phone, address, booking_id)
--- VALUES
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Jane', 'Doe', 'jane.doe@example.com', '0987654321', '456 Oak Avenue', 1),
---     ('John', 'Smith', 'john.smith@example.com', '5551234567', '789 Pine Road', 2);
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 1),
---     ('Umar', 'Bunyaminu', 'umarbunyaminu@gmail.com', '1234567890', '123 Elm Street', 2);
---     ('Jane', 'Doe', 'jane.doe@example.com', '0987654321', '456 Oak Avenue', 2),
---     ('John', 'Smith', 'john.smith@example.com', '5551234567', '789 Pine Road', 2),
---     ('Alice', 'Johnson', 'alice.johnson@example.com', '5559876543', '101 Maple Street', 2),
---     ('Bob', 'Brown', 'bob.brown@example.com', '5555555555', '202 Cedar Lane', 2),
---     ('Charlie', 'Davis', 'charlie.davis@example.com', '5554444444', '303 Birch Boulevard', 2),
---     ('Diana', 'Evans', 'diana.evans@example.com', '5553333333', '404 Pine Avenue', 1),
---     ('Edward', 'Green', 'edward.green@example.com', '5552222222', '505 Spruce Street', 3),
---     ('Fiona', 'Hill', 'fiona.hill@example.com', '5551111111', '606 Willow Road', 4),
---     ('George', 'Ingram', 'george.ingram@example.com', '5550000000', '707 Fir Place', 5);
---
---
 
+
+
+
+INSERT INTO Booking (id, booking_date, status, trip_type, total_price, return_date, flight_id)
+VALUES
+    (1, '2024-08-10', 'PENDING', 'ONE_WAY', 150.00, NULL, 1),
+    (2, '2024-08-12', 'CONFIRMED', 'ONE_WAY', 300.00, NULL, 2),
+    (3, '2024-08-15', 'PENDING', 'ONE_WAY', 200.00, NULL, 3),
+    (4, '2024-08-20', 'CANCELLED', 'ROUND_TRIP', 400.00, NULL, 4),
+    (5, '2024-08-22', 'CONFIRMED', 'ROUND_TRIP', 500.00, NULL, 5),
+    (6, '2024-08-25', 'PENDING', 'ONE_WAY', 180.00, NULL, 6),
+    (7, '2024-08-27', 'CONFIRMED', 'ROUND_TRIP', 350.00, NULL, 7),
+    (8, '2024-08-30', 'CANCELLED', 'ONE_WAY', 220.00, NULL, 8),
+    (9, '2024-09-02', 'PENDING', 'ROUND_TRIP', 320.00, NULL, 9),
+    (10, '2024-09-05', 'CONFIRMED', 'ONE_WAY', 270.00, NULL, 10),
+    (11, '2024-09-08', 'PENDING', 'ROUND_TRIP', 600.00, NULL, 11),
+    (12, '2024-09-10', 'CONFIRMED', 'ONE_WAY', 240.00, NULL, 12),
+    (13, '2024-09-12', 'CANCELLED', 'ROUND_TRIP', 420.00, NULL, 13),
+    (14, '2024-09-15', 'PENDING', 'ONE_WAY', 300.00, NULL, 14),
+    (15, '2024-09-18', 'CONFIRMED', 'ROUND_TRIP', 550.00, NULL, 15);
+
+INSERT INTO Passenger (id, first_name, last_name, email, phone, address, booking_id)
+VALUES
+    -- Passengers for booking_id 1
+    (1, 'Abdoon', 'Nur', 'abdoon.nur@miu.edu', '1234567890', '123 Main St', 1),
+    (2, 'John', 'Champion', 'john.champion@example.com', '2345678901', '123 Main St', 1),
+    (3, 'Alice', 'Johnson', 'alice.johnson@example.com', '3456789012', '123 Main St', 1),
+
+    -- Passengers for booking_id 2
+    (4, 'Jane', 'Smith', 'admin@example.com', '0987654321', '456 Elm St', 2),
+    (5, 'Michael', 'Brown', 'michael.brown@example.com', '3456789012', '456 Elm St', 2),
+
+    -- Passengers for booking_id 3
+    (6, 'Carol', 'Brown', 'user3@example.com', '3334445555', '202 Oak St', 3),
+    (7, 'Dave', 'Miller', 'dave.miller@example.com', '4567890123', '202 Oak St', 3),
+    (8, 'Emily', 'Taylor', 'emily.taylor@example.com', '5678901234', '202 Oak St', 3),
+
+    -- Passengers for booking_id 4
+    (9, 'Bob', 'Williams', 'user2@example.com', '2223334444', '101 Maple St', 4),
+    (10, 'Lisa', 'Wilson', 'lisa.wilson@example.com', '4567890123', '101 Maple St', 4),
+
+    -- Passengers for booking_id 5
+    (11, 'David', 'Jones', 'user4@example.com', '4445556666', '303 Cedar St', 5),
+    (12, 'Sophia', 'Martinez', 'sophia.martinez@example.com', '5678901234', '303 Cedar St', 5),
+    (13, 'Olivia', 'Garcia', 'olivia.garcia@example.com', '6789012345', '303 Cedar St', 5),
+
+    -- Passengers for booking_id 6
+    (14, 'Eva', 'Garcia', 'user5@example.com', '5556667777', '404 Birch St', 6),
+    (15, 'George', 'Taylor', 'george.taylor@example.com', '6789012345', '404 Birch St', 6),
+
+    -- Passengers for booking_id 7
+    (16, 'Frank', 'Martinez', 'user6@example.com', '6667778888', '505 Walnut St', 7),
+    (17, 'Nina', 'Adams', 'nina.adams@example.com', '7890123456', '505 Walnut St', 7),
+
+    -- Passengers for booking_id 8
+    (18, 'Grace', 'Hernandez', 'user7@example.com', '7778889999', '606 Cherry St', 8),
+    (19, 'Chris', 'Scott', 'chris.scott@example.com', '8901234567', '606 Cherry St', 8),
+    (20, 'Paul', 'Green', 'paul.green@example.com', '9012345678', '606 Cherry St', 8),
+
+    -- Passengers for booking_id 9
+    (21, 'Henry', 'Lopez', 'user8@example.com', '8889990000', '707 Ash St', 9),
+    (22, 'Olivia', 'Lee', 'olivia.lee@example.com', '9012345678', '707 Ash St', 9),
+    (23, 'James', 'Wilson', 'james.wilson@example.com', '0123456789', '707 Ash St', 9),
+
+    -- Passengers for booking_id 10
+    (24, 'Emma', 'Jones', 'emma.jones@example.com', '0123456789', '808 Birch St', 10),
+    (25, 'Liam', 'Williams', 'liam.williams@example.com', '1234567890', '808 Birch St', 10),
+
+    -- Passengers for booking_id 11
+    (26, 'Noah', 'Davis', 'noah.davis@example.com', '2345678901', '909 Pine St', 11),
+    (27, 'Mia', 'Garcia', 'mia.garcia@example.com', '3456789012', '909 Pine St', 11),
+
+    -- Passengers for booking_id 12
+    (28, 'Ava', 'Martinez', 'ava.martinez@example.com', '4567890123', '1010 Maple St', 12),
+    (29, 'Ethan', 'Adams', 'ethan.adams@example.com', '5678901234', '1010 Maple St', 12),
+    (30, 'Sophia', 'Morris', 'sophia.morris@example.com', '6789012345', '1010 Maple St', 12),
+
+    -- Passengers for booking_id 13
+    (31, 'Isabella', 'Hernandez', 'isabella.hernandez@example.com', '6789012345', '1111 Oak St', 13),
+    (32, 'Mason', 'Lopez', 'mason.lopez@example.com', '7890123456', '1111 Oak St', 13),
+
+    -- Passengers for booking_id 14
+    (33, 'Sophia', 'Wilson', 'sophia.wilson@example.com', '8901234567', '1212 Elm St', 14),
+    (34, 'Jacob', 'Scott', 'jacob.scott@example.com', '9012345678', '1212 Elm St', 14),
+    (35, 'Lucas', 'Brown', 'lucas.brown@example.com', '0123456789', '1212 Elm St', 14),
+
+    -- Passengers for booking_id 15
+    (36, 'Liam', 'Brown', 'liam.brown@example.com', '0123456789', '1313 Cherry St', 15),
+    (37, 'Charlotte', 'Davis', 'charlotte.davis@example.com', '1234567890', '1313 Cherry St', 15),
+    (38, 'Noah', 'Miller', 'noah.miller@example.com', '2345678901', '1313 Cherry St', 15);
 
 
 

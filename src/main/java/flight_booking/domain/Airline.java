@@ -1,5 +1,7 @@
 package flight_booking.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +20,8 @@ public class Airline {
     private String airlineName;
     private String airlineLogo;
     private String country;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "airline")
     private List<Flight> flights;
 }

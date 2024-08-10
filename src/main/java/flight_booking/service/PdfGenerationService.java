@@ -27,8 +27,6 @@ public class PdfGenerationService {
     @Autowired
     BookingRepository bookingRepository;
 
-    @Autowired
-    private FlightRepository flightRepository;
 
 
     public byte[] generateTicketPdf(long bookingId) throws Exception {
