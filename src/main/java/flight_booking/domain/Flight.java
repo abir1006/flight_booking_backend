@@ -1,5 +1,6 @@
 package flight_booking.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class Flight {
 
     private double ticketPrice;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "airline_id")
 

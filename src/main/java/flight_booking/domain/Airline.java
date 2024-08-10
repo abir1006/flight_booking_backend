@@ -1,5 +1,6 @@
 package flight_booking.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class Airline {
     private String airlineName;
     private String airlineLogo;
     private String country;
+    @JsonManagedReference
     @OneToMany(mappedBy = "airline")
     private List<Flight> flights;
 }
