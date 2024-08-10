@@ -33,7 +33,6 @@ public class Flight {
 
     private double ticketPrice;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "airline_id")
 
