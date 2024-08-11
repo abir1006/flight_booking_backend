@@ -18,10 +18,4 @@ public interface FlightRepository extends GenericRepository<Flight, Long>, Fligh
     List<Flight> findByFlightSchedule_DepartureDateTimeBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     List<Flight> findByAvailableSeatsGreaterThanEqual(int availableSeats);
-
-    @Query("select f from Flight f where f.ticketPrice <= :ticketPrice")
-    List<Flight> searchByTicketPrice(double ticketPrice);
-
-    @Query("select f from Flight f where f.airline.id = :id")
-    List<Flight> searchByAirline(Long id);
 }

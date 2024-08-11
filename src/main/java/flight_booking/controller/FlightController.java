@@ -74,27 +74,17 @@ public class FlightController extends GenericController<Long,FlightDto> {
         return new ResponseEntity<>(flights, HttpStatus.OK);
     }
 
-    @GetMapping("/search/byTicketPrice/{ticketPrice}")
-    public ResponseEntity<List<FlightDto>> searchByTicketPrice(@PathVariable double ticketPrice) {
-         List<FlightDto> flights = flightService.searchByTicketPrice(ticketPrice);
-         return new ResponseEntity<>(flights, HttpStatus.OK);
-    }
-
-    @GetMapping("/search/byAirline")
-    public ResponseEntity<List<FlightDto>> searchByAirline(@RequestParam Long id) {
-        List<FlightDto> flights = flightService.searchByAirline(id);
-        return new ResponseEntity<>(flights, HttpStatus.OK);
-    }
-
     @GetMapping("/search")
     public ResponseEntity<List<List<FlightDto>>> searchFlights(
             @RequestParam(required = false) Long departureAirportId,
             @RequestParam(required = false) Long arrivalAirportId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(required = false) Integer travellers) {
+            @RequestParam(required = false) Integer travellers,
+            @RequestParam(required = false) List<Long> airlines,
+            @RequestParam(required = false) Double ticketPrice) {
 
-        List<List<FlightDto>> flights = flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
+        List<List<FlightDto>> flights = flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers, airlines, ticketPrice);
         return ResponseEntity.ok(flights);
     }
 

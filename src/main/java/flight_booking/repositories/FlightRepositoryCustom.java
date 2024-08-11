@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface FlightRepositoryCustom {
-    List<Flight> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate date, Integer travellers, boolean isOutbound);
+    List<Flight> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate date, Integer travellers, boolean isOutbound, List<Long> airlines, Double ticketPrice);
 }
