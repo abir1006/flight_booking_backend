@@ -1,6 +1,7 @@
 package flight_booking.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import flight_booking.domain.Airline;
 import flight_booking.domain.Airport;
 import flight_booking.domain.FlightSchedule;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class FlightDto {
     private Double ticketPrice;
     private String airlineName;
     private String airlineLogo;
+    private Airline airline;
 
     // Getters and Setters
 }
