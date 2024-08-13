@@ -29,16 +29,7 @@ public interface FlightService extends GenericService<Long, FlightDto> {
 
     List<FlightDto> searchByAvailableSeats(int availableSeats);
 
-    List<List<FlightDto>> searchFlights(
-            Long departureAirportId,
-            Long arrivalAirportId,
-            LocalDate startDate,
-            LocalDate endDate,
-            Integer travellers,
-            List<Long> airlines,
-            Double ticketPrice
-    );
-
+    List<List<FlightDto>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers, List<Long> airlines, Double ticketPrice);
 //   //There should be Airplane Entity model
 //    List<FlightDto> searchByAvailablePlanes(String planeModel);
 
