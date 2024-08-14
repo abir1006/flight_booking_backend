@@ -56,19 +56,19 @@ public class FlightController extends GenericController<Long,FlightDto> {
     }
 
 //    // Flight Search
-    @GetMapping("search/byAirport")
+    @GetMapping("/search/byAirport")
     public ResponseEntity<List<FlightDto>> searchByAirport(@RequestParam Long airportId) {
         List<FlightDto> flights = flightService.searchByAirport(airportId);
         return new ResponseEntity<>(flights, HttpStatus.OK);
     }
 
-    @GetMapping("search/byDateRange")
+    @GetMapping("/search/byDateRange")
     public ResponseEntity<List<FlightDto>> searchByDateRange(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate) {
         List<FlightDto> flights = flightService.searchFlightsByDateRange(startDate, endDate);
         return new ResponseEntity<>(flights, HttpStatus.OK);
     }
 
-    @GetMapping("search/byAvailableSeats")
+    @GetMapping("/search/byAvailableSeats")
     public ResponseEntity<List<FlightDto>> searchByAvailableSeats(@RequestParam int availableSeats) {
         List<FlightDto> flights = flightService.searchByAvailableSeats(availableSeats);
         return new ResponseEntity<>(flights, HttpStatus.OK);
@@ -80,9 +80,11 @@ public class FlightController extends GenericController<Long,FlightDto> {
             @RequestParam(required = false) Long arrivalAirportId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(required = false) Integer travellers) {
+            @RequestParam(required = false) Integer travellers,
+            @RequestParam(required = false) List<Long> airlines,
+            @RequestParam(required = false) Double ticketPrice) {
 
-        List<List<FlightDto>> flights = flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers);
+        List<List<FlightDto>> flights = flightService.searchFlights(departureAirportId, arrivalAirportId, startDate, endDate, travellers, airlines, ticketPrice);
         return ResponseEntity.ok(flights);
     }
 

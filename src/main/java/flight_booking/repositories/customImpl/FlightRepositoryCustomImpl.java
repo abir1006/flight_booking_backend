@@ -24,13 +24,14 @@ public class FlightRepositoryCustomImpl implements FlightRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Flight> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate date, Integer travellers, boolean isOutbound) {
+    public List<Flight> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate date, Integer travellers, List<Long> airlines, Double ticketPrice, boolean isOutbound) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Flight> query = cb.createQuery(Flight.class);
         Root<Flight> flight = query.from(Flight.class);
 
         List<Predicate> predicates = new ArrayList<>();
 
+        // Filter by departure and arrival airports
         if (isOutbound) {
             if (departureAirportId != null) {
                 predicates.add(cb.equal(flight.get("departureAirport").get("id"), departureAirportId));
@@ -47,11 +48,24 @@ public class FlightRepositoryCustomImpl implements FlightRepositoryCustom {
             }
         }
 
+        // Filter by date
         if (date != null) {
             predicates.add(cb.equal(flight.get("flightSchedule").get("departureDate"), date));
         }
+
+        // Filter by travellers (available seats)
         if (travellers != null) {
             predicates.add(cb.greaterThanOrEqualTo(flight.get("availableSeats"), travellers));
+        }
+
+        // Filter by airlines
+        if (airlines != null && !airlines.isEmpty()) {
+            predicates.add(flight.get("airline").get("id").in(airlines));
+        }
+
+        // Filter by ticket price
+        if (ticketPrice != null) {
+            predicates.add(cb.lessThanOrEqualTo(flight.get("ticketPrice"), ticketPrice));
         }
 
         query.where(predicates.toArray(new Predicate[0]));

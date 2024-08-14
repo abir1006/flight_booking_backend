@@ -1,6 +1,9 @@
 package flight_booking.service;
 
+import flight_booking.domain.Flight;
 import flight_booking.dto.FlightDto;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,8 +29,7 @@ public interface FlightService extends GenericService<Long, FlightDto> {
 
     List<FlightDto> searchByAvailableSeats(int availableSeats);
 
-    List<List<FlightDto>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers);
-
+    List<List<FlightDto>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers, List<Long> airlines, Double ticketPrice);
 //   //There should be Airplane Entity model
 //    List<FlightDto> searchByAvailablePlanes(String planeModel);
 

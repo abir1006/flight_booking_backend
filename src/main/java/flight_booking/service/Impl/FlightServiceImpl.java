@@ -10,6 +10,7 @@ import flight_booking.service.FlightService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -69,8 +70,9 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
     }
 
     @Override
-    public List<List<FlightDto>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers) {
-        List<FlightDto> outboundFlights = flightRepositoryCustomImpl.searchFlights(departureAirportId, arrivalAirportId, startDate, travellers, true)
+    public List<List<FlightDto>> searchFlights(Long departureAirportId, Long arrivalAirportId, LocalDate startDate, LocalDate endDate, Integer travellers, List<Long> airlines, Double ticketPrice) {
+        // Outbound Flights
+        List<FlightDto> outboundFlights = flightRepositoryCustomImpl.searchFlights(departureAirportId, arrivalAirportId, startDate, travellers, airlines, ticketPrice, true)
                 .stream()
                 .map(flight -> {
                     FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
@@ -80,7 +82,8 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
                 })
                 .collect(Collectors.toList());
 
-        List<FlightDto> returnFlights = flightRepositoryCustomImpl.searchFlights(departureAirportId, arrivalAirportId, endDate, travellers, false)
+        // Return Flights
+        List<FlightDto> returnFlights = flightRepositoryCustomImpl.searchFlights(departureAirportId, arrivalAirportId, endDate, travellers, airlines, ticketPrice, false)
                 .stream()
                 .map(flight -> {
                     FlightDto flightDto = modelMapper.map(flight, FlightDto.class);
@@ -95,6 +98,7 @@ public class FlightServiceImpl extends GenericServiceImpl<Flight,Long,FlightDto>
         result.add(returnFlights);
         return result;
     }
+
 
 
     //There should be Airplane Entity model
