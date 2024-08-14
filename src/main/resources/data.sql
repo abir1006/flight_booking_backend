@@ -212,13 +212,6 @@ VALUES
     (32, 'AA15234', '2024-09-04', '15:00:00', 150, '2024-09-04', '13:00:00', 600.00, 2, 1, 2);
 
 
-
-
-
-
-
-
-
 INSERT INTO Booking (id, booking_date, status, trip_type, total_price, return_date, flight_id)
 VALUES
     (1, '2024-08-10', 'PENDING', 'ONE_WAY', 150.00, NULL, 1),
