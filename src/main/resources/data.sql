@@ -233,6 +233,7 @@ VALUES (1, '2024-08-10', 'PENDING', 'ONE_WAY', 150.00, NULL, 1),
        (14, '2024-09-15', 'PENDING', 'ONE_WAY', 300.00, NULL, 14),
        (15, '2024-09-18', 'CONFIRMED', 'ROUND_TRIP', 550.00, NULL, 15);
 
+
 INSERT INTO Passenger (id, first_name, last_name, email, phone, address, booking_id)
 VALUES
     -- Passengers for booking_id 1
@@ -303,7 +304,8 @@ VALUES
     (37, 'Charlotte', 'Davis', 'charlotte.davis@example.com', '1234567890', '1313 Cherry St', 15),
     (38, 'Noah', 'Miller', 'noah.miller@example.com', '2345678901', '1313 Cherry St', 15);
 
-
+ALTER SEQUENCE booking_id_seq RESTART WITH 16;
+ALTER SEQUENCE passenger_id_seq RESTART WITH 39;
 
 
 
