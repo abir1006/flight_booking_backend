@@ -102,7 +102,7 @@ public class BookingServiceImpl extends GenericServiceImpl<Booking, Long, Bookin
             bookingDto.setReturnArrivalDate(returnFlight.getFlightSchedule().getArrivalDate());
             bookingDto.setReturnArrivalTime(returnFlight.getFlightSchedule().getArrivalTime());
 
-            bookingDto.setTotalPrice(bookingDto.getTotalPrice() * 1.8);
+            bookingDto.setTotalPrice(bookingDto.getTotalPrice());
         }
 
         Booking booking = modelMapper.map(bookingDto, Booking.class);
